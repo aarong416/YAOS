@@ -1,0 +1,5 @@
+timeout=15
+default=0
+
+title YAOS
+kernel /boot/kernel.bin
