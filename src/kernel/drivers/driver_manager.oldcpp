@@ -1,0 +1,84 @@
+#include "driver_manager.h"
+
+/**
+ * Initialize the driver manager by setting all values to a null pointer
+ */
+void DriverManager::initializeDrivers()
+{
+    m_current_id = 0;
+
+    for (unsigned int i = 0; i < MAX_DRIVERS; i++) {
+        m_drivers[i] = nullptr;
+    }
+}
+
+/**
+ * Install a driver
+ * 
+ * @param Driver driver The driver to install
+ * 
+ * @returns int  Indicates whether the driver was installed successfully or not. A return value
+ *               of DRIVER_SUCCESS indicates the driver was installed successfully, an a return
+ *               value of DRIVER_FAILURE indicates the driver was not installed.
+ * 
+ *               Reasons for failure:
+ *                  - the maximum numbers of installed drivers has been reached
+ */
+int DriverManager::installDriver(Driver* driver)
+{
+    if (m_current_id >= MAX_DRIVERS) {
+        // TODO: logging: too many drivers
+        return -1;
+    }
+
+    driver->setId(m_current_id);
+
+    m_drivers[m_current_id++] = driver;
+
+    return 0;
+}
+
+/**
+ * Remove a previously installed driver by its ID
+ * 
+ * @param int id The ID of the driver to remove
+ * 
+ * @returns int An integer indicating success or failure. A value of DRIVER_SUCCESS
+ *              indicates the the driver was successfully removed, while a value
+ *              of DRIVER_FAILURE indicates that the driver could not be removed.
+ *              
+ *              Reasons for failure:
+ *                  - the driver by the specified ID does not exist
+ */
+int DriverManager::removeDriver(int id)
+{
+    if (id >= MAX_DRIVERS) {
+        return DRIVER_FAILURE;
+    }
+
+    m_drivers[id] = nullptr;
+    m_current_id = id;
+
+    return DRIVER_SUCCESS;
+}
+
+/**
+ * Get a driver by its ID
+ * 
+ * @param id The ID of the driver to get
+ * 
+ * @returns Driver|nullptr Returns the driver if it exists, or `nullptr` otherwise
+ */
+Driver* DriverManager::getDriver(int id)
+{
+    if (m_drivers[id] == nullptr) {
+        return nullptr;
+    }
+
+    return m_drivers[id];
+}
+
+Driver** DriverManager::getAllDrivers()
+{
+    return m_drivers;
+}

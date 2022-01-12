@@ -1,0 +1,71 @@
+#include <drivers/driver.h>
+
+/**
+ * Create a driver with a name and a type
+ * 
+ * @param const char* name        The name of the driver
+ * @param const char* description The drive's description
+ * @param DriverType  type        The type of the driver
+ */
+Driver::Driver(const char* name, const char* description, DriverType type)
+: m_name(name),
+  m_description(description),
+  m_type(type)
+{}
+
+/**
+ * Get the driver's name
+ * 
+ * @returns const char* The name of the driver
+ */
+// TODO: change to std::string
+const char* Driver::getName()
+{
+  return m_name;
+}
+
+/**
+ * Get the driver's description
+ * 
+ * @returns const char* The type of the driver
+ */
+// TODO: change to std::string
+const char* Driver::getDescription()
+{
+  return m_description;
+}
+
+/**
+ * Get the driver's type
+ * 
+ * @returns const char* The type of the driver
+ */
+// TODO: change to std::string
+DriverType Driver::getType()
+{
+  return m_type;
+}
+
+/**
+ * Check if the driver is installed
+ * 
+ * @returns bool Returns `true` if the driver is installed, `false` otherwise
+ */
+// TODO: change to std::string
+bool Driver::isInstalled()
+{
+  return m_installed;
+}
+
+/**
+ * Set the driver's ID
+ * 
+ * @param int id The ID to set for the driver
+ * 
+ * @returns const char* The type of the driver
+ */
+// TODO: change to std::string
+void Driver::setId(int id)
+{
+  m_id = id;
+}

@@ -1,0 +1,7 @@
+#include <exceptions/exception.h>
+
+class DriverNotInstalledException: public Exception {
+  public:
+    DriverNotInstalledException();
+    DriverNotInstalledException(const char* message, std::uint32_t code = 0);
+};

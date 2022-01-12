@@ -1,0 +1,6 @@
+#include <drivers/memory_manager_driver.h>
+
+void MemoryManagerDriver::initialize()
+{
+  // TODO: call memset() for the entire kernel heap
+}

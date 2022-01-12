@@ -1,29 +1,40 @@
 AS := nasm
 ASFLAGS := -f elf
 CC := i686-elf-g++
-CFLAGS := -c -m32 -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti -I src/kernel -I src/kernel/drivers
+CFLAGS := -c -m32 -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti \
+					-I src/			   \
+					-I src/include \
+					-I src/kernel  \
+					-I src/libc++/include
 LINKERFLAGS := -ffreestanding -nostdlib
 SRCDIR := ./src
 OBJDIR := ./obj
-SRCFILES := $(shell find $(SRCDIR) -name *.cc)
-OBJFILES := $(patsubst $(SRCDIR)/%.cc,$(OBJDIR)/%.o,$(SRCFILES))
+SRCFILES := $(shell find $(SRCDIR) -name *.cpp)
+OBJFILES := $(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SRCFILES))
 
 all: prepare assemble $(OBJFILES) link grub run
 
 prepare:
 	@clear
-	@mkdir -p obj
+	@mkdir -p obj/include/io
+	@mkdir -p obj/boot
+	@mkdir -p obj/kernel
+	@mkdir -p obj/exceptions
+	@mkdir -p obj/libc++
 
-assemble: obj/boot.o
-	@$(AS) $(ASFLAGS) src/boot.asm -o obj/boot.o
+	@echo $(OBJFILES)
 
-$(OBJFILES): $(OBJDIR)/%.o: $(SRCDIR)/%.cc
+assemble:
+	@$(AS) $(ASFLAGS) src/boot.asm -o obj/boot/boot.o
+	@$(AS) $(ASFLAGS) src/include/io/io.asm -o obj/include/io/io.o
+
+$(OBJFILES): $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	@mkdir -p $(@D)
 	@echo Compile $<
 	@$(CC) $(CFLAGS) $< -o $@
 
 link:
-	@$(CC) -T src/link.ld obj/boot.o $(OBJFILES) -o iso/boot/kernel.bin $(LINKERFLAGS) -lgcc
+	@$(CC) -T src/link.ld obj/boot/boot.o obj/include/io/io.o $(OBJFILES) -o iso/boot/kernel.bin $(LINKERFLAGS) -lgcc
 
 grub: iso/boot/kernel.bin
 	@grub-mkrescue --quiet iso -o os.iso

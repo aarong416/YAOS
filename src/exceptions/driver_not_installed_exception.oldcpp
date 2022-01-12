@@ -1,0 +1,7 @@
+#include <exceptions/driver_not_installed_exception.h>
+#include <exceptions/exception.h>
+
+DriverNotInstalledException::DriverNotInstalledException(const char* message, std::uint32_t code)
+{
+  Exception(message, code);
+}

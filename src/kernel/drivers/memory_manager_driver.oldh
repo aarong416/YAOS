@@ -1,0 +1,13 @@
+#ifndef MEMORY_MANAGER_DRIVER_H
+#define MEMORY_MANAGER_DRIVER_H
+
+#include <drivers/driver.h>
+#include <cstddef.h>
+
+class MemoryManagerDriver: public Driver {
+  public:
+    void initialize();
+    void* allocateMemory(size_t size);
+};
+
+#endif
