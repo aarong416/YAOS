@@ -1,5 +1,5 @@
 #include <drivers/tty_driver.h>
-#include <cstring.h>
+#include <cstring/cstring.h>
 
 TtyDriver::TtyDriver()
 {
@@ -22,7 +22,7 @@ void TtyDriver::SetTerminalColor(VgaColor fg, VgaColor bg)
     m_terminal_color = VgaHelper::MakeColor(fg, bg);
 }
 
-void TtyDriver::Write(char c)
+void TtyDriver::WriteChar(char c)
 {
     unsigned int width = VgaHelper::GetVgaWidth();
     unsigned int i = m_cursor_y * width + m_cursor_x;
@@ -39,9 +39,19 @@ void TtyDriver::Write(char c)
     }
 }
 
-void TtyDriver::Write(char* s)
+void TtyDriver::Write(const char* s)
 {
     for (size_t i=0; i<strlen(s); i++) {
-        Write(s[i]);
+        WriteChar(s[i]);
+    }
+}
+
+void TtyDriver::Write(std::string s)
+{
+    for (size_t i=0; i<s.length(); i++) {
+        int rem = i % 10;
+        char c = rem > 9 ? (rem - 10) + 'a' : rem + '0';
+
+        WriteChar(s[i]);
     }
 }

@@ -1,7 +1,7 @@
-#include <kernel.h>
+#include <cstring/cstring.h>
 #include <drivers/tty_driver.h>
-#include <cstdint.h>
 #include <io/io.h>
+#include <kernel.h>
 
 // The entry point for the kernel after it has been loaded by the bootloader
 void kernel_main()
@@ -12,9 +12,9 @@ void kernel_main()
 
     // DriverManager::installDriver(tty);
 
-    tty.Write('A');
-    tty.Write('A');
-    tty.Write('A');
+    std::String s("Hello, world!");
+
+    // tty.Write(s);
 
     // Driver** drivers = DriverManager::getAllDrivers();
 

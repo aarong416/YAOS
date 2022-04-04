@@ -2,7 +2,6 @@ AS := nasm
 ASFLAGS := -f elf
 CC := i686-elf-g++
 CFLAGS := -c -m32 -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti \
-					-I src/			   \
 					-I src/include \
 					-I src/kernel  \
 					-I src/libc++/include
