@@ -17,7 +17,7 @@
  * have been allocated.
  */
 struct MemoryNode {
-  bool allocated;
+  bool          allocated;
   std::uint32_t num_blocks;
 };
 

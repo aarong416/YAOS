@@ -14,7 +14,7 @@ void kernel_main()
 
     std::String s("Hello, world!");
 
-    // tty.Write(s);
+    tty.Write(s);
 
     // Driver** drivers = DriverManager::getAllDrivers();
 

@@ -2,16 +2,10 @@
 #include <cstdint.h>
 #include <cmath/cmath.h>
 
-#include <drivers/tty_driver.h>
-
-std::uint8_t* pos = (std::uint8_t*) kernel_end;
-
-TtyDriver tty;
+std::uint8_t* pos = (std::uint8_t*) &kernel_end;
 
 void* std::malloc(std::size_t size)
 {
-  // tty.Write(size);
-
   if (size == 0) {
     return (void*) NULL;
   }
@@ -47,7 +41,7 @@ void* std::malloc(std::size_t size)
       block_found = true;
     } else {
       /* Retrieve the number of allocated blocks */
-      std::uint32_t blocks_allocated = node->num_blocks * BLOCK_SIZE;
+      std::uint32_t blocks_allocated = node->num_blocks;
 
       /* Increase pos by the number of allocated blocks * BLOCK_SIZE */
       pos += (blocks_allocated * BLOCK_SIZE) + 5;

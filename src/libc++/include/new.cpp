@@ -1,8 +1,9 @@
-#include <kernel/memory/memory.h>
-#include <libc++/include/cstddef.h>
-#include <libc++/include/cstdlib/cstdlib.h>
+#include <drivers/tty_driver.h>
+#include <memory/memory.h>
+#include <cstddef.h>
+#include <cstdlib/cstdlib.h>
 
-extern std::uint32_t kernel_end;
+extern TtyDriver tty;
 
 void* operator new(std::size_t count)
 {

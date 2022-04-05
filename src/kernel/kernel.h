@@ -13,6 +13,6 @@ using namespace std;
 extern "C" void kernel_main();
 extern std::uint32_t end;
 
-std::uint32_t kernel_end = (std::uint32_t) &end;
+std::uint32_t kernel_end = (std::uint32_t) end + 1;
 
 #endif

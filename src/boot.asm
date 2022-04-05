@@ -1,7 +1,7 @@
 [bits 32]
 
-extern kernel_main
 
+extern kernel_main
 global start
 
 ; Multiboot 2 header structure:
@@ -11,11 +11,11 @@ global start
 ;   - checksum
 ;   - tags
 
-MAGIC equ 0xE85250D6
-ARCH equ 0
-CHECKSUM equ -(MAGIC+HEADER_LEN)
-TAGS equ 0
+MAGIC      equ 0xE85250D6
+ARCH       equ 0
 HEADER_LEN equ 10
+CHECKSUM   equ -(MAGIC+HEADER_LEN)
+TAGS       equ 0
 
 section .multiboot
 

@@ -2,6 +2,7 @@
 #define CSTRING_H
 
 #define NULL ((void*) 0)
+#define BUFFER_SIZE 128
 
 #include <cstdint.h>
 
@@ -37,6 +38,7 @@ namespace std {
     private:
       char* m_string;
       unsigned int m_length;
+      unsigned int m_capacity;
   };
 
   typedef String string;
