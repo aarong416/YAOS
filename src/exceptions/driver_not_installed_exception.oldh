@@ -3,5 +3,5 @@
 class DriverNotInstalledException: public Exception {
   public:
     DriverNotInstalledException();
-    DriverNotInstalledException(const char* message, std::uint32_t code = 0);
+    DriverNotInstalledException(const char* message, uint32_t code = 0);
 };

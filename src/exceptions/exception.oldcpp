@@ -1,6 +1,6 @@
 #include <exceptions/exception.h>
 
-Exception::Exception(const char* message, std::uint32_t code)
+Exception::Exception(const char* message, uint32_t code)
 : m_message(message),
   m_code(code)
 {}
@@ -20,7 +20,7 @@ const char* Exception::getMessage()
  * 
  * @returns uint32_t The exception code
  */
-std::uint32_t Exception::getCode()
+uint32_t Exception::getCode()
 {
   return m_code;
 }

@@ -3,23 +3,24 @@
 
 /**
  * Create a driver with a name and a type
- * 
+ *
  * @param std::string name        The driver's name
  * @param std::string description The driver's description
  * @param DriverType  type        The type of the driver
  */
-Driver::Driver(std::string name, std::string description, DriverType type)
-: m_name(name),
-  m_description(description),
-  m_type(type)
-{}
+Driver::Driver(const char* name, const char* description, DriverType type)
+  : m_name(name)
+  , m_description(description)
+  , m_type(type)
+{
+}
 
-std::string Driver::getName()
+const char* Driver::getName()
 {
   return m_name;
 }
 
-std::string Driver::getDescription()
+const char* Driver::getDescription()
 {
   return m_description;
 }

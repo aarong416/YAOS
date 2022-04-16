@@ -1,6 +1,6 @@
 #include <cmath/cmath.h>
-#include <cstring/cstring.h>
 #include <cstdlib/cstdlib.h>
+#include <cstring/cstring.h>
 #include <drivers/driver_manager.h>
 #include <drivers/tty_driver.h>
 #include <string/string.h>
@@ -12,26 +12,18 @@
 // Creates a new string and allocates memory for it.
 std::String::String(const char* s)
 {
-  TtyDriver* tty = new TtyDriver();
-
-  DriverManager::installDriver(tty);
-
-  // tty->WriteChar('a');
-
-  return;
-
   // Allocate memory for the new string.
   // strlen(s) + 1 accounts for the extra NULL byte at the end of the string.
-  std::uint32_t capacity = 
-    (strlen(s) + 1) <= BUFFER_SIZE
-    ? BUFFER_SIZE 
-    : ceil((strlen(s) + 1) / BUFFER_SIZE) * BUFFER_SIZE;
+  uint32_t capacity = (strlen(s) + 1) <= BUFFER_SIZE
+                        ? BUFFER_SIZE
+                        : ceil((strlen(s) + 1) / BUFFER_SIZE) * BUFFER_SIZE;
 
   // m_string = new char[capacity];
 
   m_string = (char*) malloc(capacity);
 
-  // No string was provided, so we create an empty array and set its length to 0
+  // No string was provided, so we create an empty array and set its length to
+  // 0
   if (!s) {
     m_length = 0;
   } else {
@@ -39,7 +31,7 @@ std::String::String(const char* s)
     // adds the null byte to the end of the array,
     // and sets the length of the string
     m_length = strlen(s);
-    
+
     strncpy(m_string, s, strlen(s));
 
     m_string[m_length] = '\0';
@@ -50,26 +42,16 @@ std::String::String(const char* s)
 
 std::String::String(size_t n, char c)
 {
-  TtyDriver* tty = new TtyDriver();
-
-  DriverManager::installDriver(tty);
-
-  tty->WriteChar('3');
-
-  return;
-
   if (n == 0) {
     return;
   }
 
-  std::uint32_t capacity = 
-    n <= BUFFER_SIZE
-    ? BUFFER_SIZE 
-    : (ceil(n + 1) / BUFFER_SIZE) * BUFFER_SIZE;
+  uint32_t capacity =
+    n <= BUFFER_SIZE ? BUFFER_SIZE : (ceil(n + 1) / BUFFER_SIZE) * BUFFER_SIZE;
 
   m_string = new char[capacity];
 
-  for (std::uint32_t i = 0; i <= n; i++) {
+  for (uint32_t i = 0; i <= n; i++) {
     m_string[i] = c;
   }
 
@@ -86,7 +68,7 @@ std::String::String(size_t n, char c)
 // Appends a string onto the end of the string
 std::String& std::String::append(const char* s)
 {
-  for (std::uint32_t i = 0; i < strlen(s); i++) {
+  for (uint32_t i = 0; i < strlen(s); i++) {
     push_back(s[i]);
   }
 
@@ -140,12 +122,8 @@ std::String& std::String::assign(const char* s)
 /**
  * Compares the provided string `s` with the current string
  */
-std::uint32_t std::String::compare(const char* s) const
+uint32_t std::String::compare(const char* s) const
 {
-  // TtyDriver* tty = (TtyDriver*) DriverManager::getDriver("tty");
-
-  // tty->Write(strcmp(m_string, s) == -1 ? "X" : "Y");
-
   return strcmp(m_string, s);
 }
 

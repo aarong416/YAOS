@@ -3,15 +3,15 @@
 
 #define EXIT_SUCCESS 0
 #define EXIT_FAILURE -1
-#define NULL         ((void*) 0)
-#define RAND_MAX     4294967296
+#define NULL (void*) 0
+#define RAND_MAX 4294967296
 
-#define BLOCK_SIZE   4096
+#define BLOCK_SIZE 4096
 
 #include <cstdint.h>
 
 // The end of the kernel, from where we can start dynamically allocating memory
-extern std::uint32_t kernel_end;
+extern uint32_t kernel_end;
 
 /**
  * A MemoryNode represents an allocated
@@ -20,8 +20,8 @@ extern std::uint32_t kernel_end;
  * have been allocated.
  */
 struct MemoryNode {
-  bool          allocated;
-  std::uint32_t num_blocks;
+  bool allocated;
+  uint32_t num_blocks;
 };
 
 typedef unsigned long size_t;

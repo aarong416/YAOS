@@ -9,8 +9,8 @@
 using namespace std;
 
 extern "C" void kernel_main();
-extern std::uint32_t end;
+extern uint32_t end;
 
-std::uint32_t kernel_end = (std::uint32_t) end + 1;
+uint32_t kernel_end = (uint32_t) end + 1;
 
 #endif
