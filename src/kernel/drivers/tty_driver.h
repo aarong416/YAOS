@@ -1,29 +1,31 @@
 #ifndef TTY_DRIVER_H
 #define TTY_DRIVER_H
 
-// #include <drivers/driver.h>
-#include <cstring/cstring.h>
+#define VIDEO_MEMORY 0xB8000;
+
+#include <drivers/driver.h>
 #include <helpers/vga_helper.h>
+#include <string/string.h>
 
-class TtyDriver
+class TtyDriver : public Driver
 {
-public:
-    TtyDriver();
+    public:
+        TtyDriver();
 
-    int GetTerminalColor();
-    void SetTerminalColor(enum VgaColor fg, enum VgaColor bg);
-    
-    void ClearScreen();
-    void WriteChar(char c);
-    void Write(const char* s);
-    void Write(std::string s);
+        std::uint32_t GetTerminalColor();
+        void SetTerminalColor(enum VgaColor fg, enum VgaColor bg);
+        
+        void ClearScreen();
+        void WriteChar(const char c);
+        void Write(const char* s);
+        void Write(const std::string& s);
 
-private:
-    unsigned int m_width;
-    unsigned int m_height;
-    unsigned int m_cursor_x;
-    unsigned int m_cursor_y;
-    unsigned int m_terminal_color;
+    private:
+        std::uint32_t m_width;
+        std::uint32_t m_height;
+        std::uint32_t m_cursor_x;
+        std::uint32_t m_cursor_y;
+        std::uint32_t m_terminal_color;
 };
 
 #endif

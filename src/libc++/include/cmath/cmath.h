@@ -1,9 +1,6 @@
-#ifndef C_MATH_H
-#define C_MATH_H
+#ifndef CMATH_H
+#define CMATH_H
 
-namespace std {
-  double ceil(double x);
-};
-
+double ceil(double x);
 
 #endif

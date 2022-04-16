@@ -1,6 +1,6 @@
 #include <cstring/cstring.h>
 
-char* std::strcpy(char* destination, const char* src)
+char* strcpy(char* destination, const char* src)
 {
   for (size_t i = 0; i < strlen(src); i++) {
     if (src[i] == '\0') {

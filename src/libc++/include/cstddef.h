@@ -5,9 +5,6 @@
 
 #include <cstdint.h>
 
-namespace std {
-  typedef unsigned long size_t;
-  typedef std::uint32_t ptrdiff_t;
-}
+typedef unsigned long size_t;
 
 #endif

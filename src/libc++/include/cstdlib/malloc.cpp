@@ -1,18 +1,18 @@
-#include <cstdlib/cstdlib.h>
-#include <cstdint.h>
 #include <cmath/cmath.h>
+#include <cstdint.h>
+#include <cstdlib/cstdlib.h>
+#include <drivers/driver_manager.h>
+#include <drivers/tty_driver.h>
 
 std::uint8_t* pos = (std::uint8_t*) &kernel_end;
 
-void* std::malloc(std::size_t size)
+// Make sure the first byte on the stack is not allocated
+
+void* malloc(size_t size)
 {
   if (size == 0) {
     return (void*) NULL;
   }
-
-  // TODO: check if pos + size >= heap_size,
-  //       then starting allocating from
-  //       the beginning again
 
   bool block_found = false;
 
@@ -33,7 +33,7 @@ void* std::malloc(std::size_t size)
        */
       std::uint32_t blocks_needed = (size % BLOCK_SIZE) == 0 
         ? (size / BLOCK_SIZE) 
-        : std::ceil(size / BLOCK_SIZE);
+        : ceil(size / BLOCK_SIZE);
       
       node->num_blocks = blocks_needed;
 
@@ -44,10 +44,10 @@ void* std::malloc(std::size_t size)
       std::uint32_t blocks_allocated = node->num_blocks;
 
       /* Increase pos by the number of allocated blocks * BLOCK_SIZE */
-      pos += (blocks_allocated * BLOCK_SIZE) + 5;
+      pos += (blocks_allocated * BLOCK_SIZE) + (blocks_allocated * 5) + 5;
     }
   }
 
   /* Returns a pointer to the beginning of the block (after the header) */
-  return pos + 5;
+  return (pos + 5);
 }

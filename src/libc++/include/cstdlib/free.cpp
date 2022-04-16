@@ -1,6 +1,6 @@
 #include <cstdlib/cstdlib.h>
 
-void std::free(void* ptr)
+void free(void* ptr)
 {
   MemoryNode* node = (MemoryNode*) ptr;
 

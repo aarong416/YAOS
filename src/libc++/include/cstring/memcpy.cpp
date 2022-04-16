@@ -1,6 +1,6 @@
-#include <cstring/cstring.h>
+#include <cstdlib/cstdlib.h>
 
-void* std::memcpy(void* destination, void* source, size_t num)
+void* memcpy(void* destination, void* source, size_t num)
 {
   unsigned char* dst = (unsigned char*) destination;
   const unsigned char* src = (unsigned char*) source;

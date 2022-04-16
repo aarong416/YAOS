@@ -1,4 +1,4 @@
-#include "vga_helper.h"
+#include <helpers/vga_helper.h>
 
 unsigned int VgaHelper::GetVgaWidth()
 {

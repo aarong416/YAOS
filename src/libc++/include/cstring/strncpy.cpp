@@ -1,6 +1,6 @@
 #include <cstring/cstring.h>
 
-char* std::strncpy(char* destination, const char* src, size_t num)
+char* strncpy(char* destination, const char* src, size_t num)
 {
   size_t n = num <= strlen(src) ? num : strlen(src);
 

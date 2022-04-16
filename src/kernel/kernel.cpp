@@ -1,24 +1,28 @@
-#include <cstring/cstring.h>
+#include <drivers/driver_manager.h>
 #include <drivers/tty_driver.h>
-#include <io/io.h>
 #include <kernel.h>
+#include <string/string.h>
 
 // The entry point for the kernel after it has been loaded by the bootloader
 void kernel_main()
 {
-    // DriverManager::initializeDrivers();
-
-    TtyDriver tty;
+    TtyDriver* tty = new TtyDriver();
 
     // DriverManager::installDriver(tty);
 
-    std::String s("Hello, world!");
+    // std::uint32_t n = 45;
 
-    tty.Write(s);
+    // std::string s = std::string("Hi there");
 
-    // Driver** drivers = DriverManager::getAllDrivers();
+    // tty->Write("DwfAwfF");
 
-    // for (unsigned int i = 0; i < sizeof(drivers) / sizeof(drivers[0]); i++) {
-    //     tty->Write('C');
+    // Driver* ttyDriver = DriverManager::getDriver("tty");
+
+    // if (ttyDriver == nullptr) {
+    //     tty->Write("Driver not found");
+    // } else {
+    //     tty->Write(ttyDriver->getDescription());
     // }
+
+    // delete tty;
 }

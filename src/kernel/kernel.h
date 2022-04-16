@@ -3,10 +3,8 @@
 
 #define MAX_MEMORY_NODES 64
 
-#include <multiboot/multiboot2.h>
-#include <memory/memory.h>
 #include <cstdint.h>
-#include <cstddef.h>
+#include <multiboot/multiboot2.h>
 
 using namespace std;
 

@@ -12,5 +12,8 @@
     "typeinfo": "cpp",
     "cstring.h": "c"
   },
-  "C_Cpp.errorSquiggles": "Enabled"
+  "C_Cpp.errorSquiggles": "Enabled",
+  "macros": {
+    "commentLine": ["editor.action.commentLine", "cursorDown"]
+  }
 }

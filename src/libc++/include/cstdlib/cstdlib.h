@@ -10,9 +10,12 @@
 
 #include <cstdint.h>
 
+// The end of the kernel, from where we can start dynamically allocating memory
+extern std::uint32_t kernel_end;
+
 /**
- * A MemoryNode represents one or more allocated
- * memory blocks. The node states whether the area
+ * A MemoryNode represents an allocated
+ * memory block. The node states whether the area
  * of memory has been allocated, and how many blocks
  * have been allocated.
  */
@@ -21,13 +24,11 @@ struct MemoryNode {
   std::uint32_t num_blocks;
 };
 
-extern std::uint32_t kernel_end;
+typedef unsigned long size_t;
 
-namespace std {
-  typedef unsigned long size_t;
+void* malloc(size_t size);
+void free(void* ptr);
 
-  void* malloc(size_t size);
-  void free(void* ptr);
-}
+char itoa(int value, char* s, int base);
 
 #endif
