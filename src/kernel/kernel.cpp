@@ -1,31 +1,42 @@
 #include <drivers/driver_manager.h>
-#include <drivers/memory_manager_driver.h>
-#include <drivers/tty_driver.h>
+#include <drivers/memory/memory_manager_driver.h>
+#include <drivers/tty/tty_driver.h>
 #include <kernel.h>
-#include <string/string.h>
+#include <memory/memory.h>
+
+void setup_drivers()
+{
+  uint32_t heap_size = 100 * 1024 * 1024; // TODO: get this from GRUB
+  InitializedMemory initialized_memory = initialize_memory_blocks(heap_size);
+
+  MemoryManagerDriver memory_manager(initialized_memory.block_data_start,
+                                     initialized_memory.heap_start, heap_size);
+  // TtyDriver tty;
+
+  DriverManager::installDriver(&memory_manager);
+  // DriverManager::installDriver(&tty);
+
+  // kernel_info.heap_start = initialized_memory.heap_start;
+  // kernel_info.heap_size = heap_size;
+}
 
 // The entry point for the kernel after it has been loaded by the bootloader
 void kernel_main()
 {
-    MemoryManagerDriver<1024> memoryManager(kernel_end);
+  // kernel_info.kernel_end = kernel_end;
+  MemoryManagerDriver* memory_manager =
+    (MemoryManagerDriver*) DriverManager::getDriver("memory_manager");
+  TtyDriver tty;
 
-    // TtyDriver* tty = new TtyDriver();
+  DriverManager::installDriver(&tty);
 
-    // DriverManager::installDriver(tty);
+  if (memory_manager == nullptr) {
+    tty.write("Null pointer");
+  } else {
+    tty.write("Not a null pointer");
+  }
 
-    // uint32_t n = 45;
+  // tty.write(tty.getName());
 
-    // std::string s = std::string("Hi there");
-
-    // tty->Write("DwfAwfF");
-
-    // Driver* ttyDriver = DriverManager::getDriver("tty");
-
-    // if (ttyDriver == nullptr) {
-    //     tty->Write("Driver not found");
-    // } else {
-    //     tty->Write(ttyDriver->getDescription());
-    // }
-
-    // delete tty;
+  // setup_drivers();
 }

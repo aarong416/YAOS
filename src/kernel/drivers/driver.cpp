@@ -4,7 +4,8 @@
 /**
  * Create a driver with a name and a type
  *
- * @param std::string name        The driver's name
+ * @param std::string name        A unique identifier for the driver, all
+ *                                lowercase and separated with underscores
  * @param std::string description The driver's description
  * @param DriverType  type        The type of the driver
  */

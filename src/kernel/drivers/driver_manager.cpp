@@ -23,7 +23,7 @@ Driver* DriverManager::m_drivers[MAX_DRIVERS] = {nullptr};
  */
 uint32_t DriverManager::installDriver(Driver* driver)
 {
-  if (m_index >= MAX_DRIVERS) {
+  if (m_driver_count >= MAX_DRIVERS) {
     // TODO: logging: too many drivers
     return DRIVER_FAILURE;
   }
@@ -38,7 +38,7 @@ uint32_t DriverManager::installDriver(Driver* driver)
 }
 
 // /**
-//  * Remove a previously installed driver by its ID
+//  * Remove a previously installed driver
 //  *
 //  * @param int id The ID of the driver to remove
 //  *
@@ -75,11 +75,11 @@ uint32_t DriverManager::installDriver(Driver* driver)
  */
 Driver* DriverManager::getDriver(std::string name)
 {
-  // TODO: change compare() to ==
+  // TODO: change compare driver name with passed in driver name
   for (uint16_t i = 0; i <= MAX_DRIVERS; i++) {
     Driver* driver = m_drivers[i];
 
-    if (driver != nullptr) {
+    if (driver != nullptr && driver->getName() == "memory_manager") {
       return m_drivers[i];
     }
   }
