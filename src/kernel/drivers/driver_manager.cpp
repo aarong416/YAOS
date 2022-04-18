@@ -1,11 +1,28 @@
 #include <cstdint.h>
+#include <cstring/cstring.h>
 #include <drivers/driver.h>
 #include <drivers/driver_manager.h>
 
 // Static variables have to be initialized outside the class
 uint16_t DriverManager::m_index = 0;
 uint16_t DriverManager::m_driver_count = 0;
-Driver* DriverManager::m_drivers[MAX_DRIVERS] = {nullptr};
+Driver** DriverManager::m_drivers = {nullptr};
+bool DriverManager::m_is_initialized = false;
+
+/**
+ * Initialized the driver manager by setting where the drivers will be stored
+ *
+ * @param start The address in memory at which drivers will be stored
+ */
+uint32_t DriverManager::initialize(uint8_t* start)
+{
+  memset(start, 0, sizeof(Driver) * MAX_DRIVERS);
+
+  m_drivers = (Driver**) start;
+  m_is_initialized = true;
+
+  return DRIVER_SUCCESS;
+}
 
 /**
  * Install a driver
@@ -18,19 +35,31 @@ Driver* DriverManager::m_drivers[MAX_DRIVERS] = {nullptr};
  * not installed.
  *
  *                   Reasons for failure:
- *                     - the maximum numbers of installed drivers has been
- * reached
+ *                     - the driver manager has not been initialized
+ *                     - the maximum numbers of installed drivers has been reached
+ *                     - the driver has already been installed
  */
-uint32_t DriverManager::installDriver(Driver* driver)
+uint32_t DriverManager::installDriver(Driver& driver)
 {
-  if (m_driver_count >= MAX_DRIVERS) {
-    // TODO: logging: too many drivers
-    return DRIVER_FAILURE;
+  if (!m_is_initialized) {
+    // TODO: logging: driver manager not initialized
+    return DRIVER_MANAGER_NOT_INITIALIZED;
   }
 
-  driver->setInstalled(true);
+  if (m_driver_count >= MAX_DRIVERS) {
+    // TODO: logging: too many drivers
+    return DRIVER_MANAGER_TOO_MANY_DRIVERS;
+  }
 
-  m_drivers[m_index++] = driver;
+  if (driver.isInstalled()) {
+    // TODO: logging: driver is already installed
+    return DRIVER_SUCCESS;
+  }
+
+  // Set the driver as installed so that it can be used
+  driver.setInstalled(true);
+
+  m_drivers[m_index++] = &driver;
 
   m_driver_count++;
 
@@ -73,14 +102,14 @@ uint32_t DriverManager::installDriver(Driver* driver)
  * @returns Driver|nullptr Returns the driver if it exists, or `nullptr`
  * otherwise
  */
-Driver* DriverManager::getDriver(std::string name)
+Driver* DriverManager::getDriver(__attribute__((unused)) std::string name)
 {
-  // TODO: change compare driver name with passed in driver name
-  for (uint16_t i = 0; i <= MAX_DRIVERS; i++) {
+  // TODO: compare driver name with passed in driver name
+  for (uint16_t i = 0; i < MAX_DRIVERS; i++) {
     Driver* driver = m_drivers[i];
 
-    if (driver != nullptr && driver->getName() == "memory_manager") {
-      return m_drivers[i];
+    if (driver != nullptr) {
+      return driver;
     }
   }
 

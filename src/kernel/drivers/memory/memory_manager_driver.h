@@ -12,11 +12,6 @@ struct MemoryBlock {
   uint32_t block_count;
 };
 
-struct FreeBlock {
-  uint32_t index;
-  uint32_t block_count;
-};
-
 class MemoryManagerDriver : public Driver
 {
 public:
@@ -29,11 +24,10 @@ public:
   uint8_t* heapAddressFromIndex(uint32_t index);
 
 private:
-  uint8_t* m_block_data_start; // The start of `m_blocks` in memory
   uint8_t* m_heap_start;
   uint32_t m_heap_size;
   uint32_t m_max_block_count; // The maximum number of blocks that can be allocated
-  uint32_t m_index = 0; // The index from which to start searching for a free block
+  uint32_t m_index = 0;       // The index from which to start searching for a free block
   MemoryBlock** m_blocks;
 };
 

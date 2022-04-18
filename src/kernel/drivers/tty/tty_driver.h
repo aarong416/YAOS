@@ -13,7 +13,7 @@ class TtyDriver : public Driver
   TtyDriver();
 
   uint32_t getTerminalColor();
-  void setTerminalColor(enum VgaColor fg, enum VgaColor bg);
+  void setTerminalColor(VgaColor text_color, VgaColor background_color);
 
   void clearScreen();
   void writeChar(const char c);

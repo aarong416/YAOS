@@ -1,8 +1,6 @@
 #include <cmath/cmath.h>
 #include <cstdlib/cstdlib.h>
 #include <cstring/cstring.h>
-#include <drivers/driver_manager.h>
-#include <drivers/tty_driver.h>
 #include <string/string.h>
 
 /**

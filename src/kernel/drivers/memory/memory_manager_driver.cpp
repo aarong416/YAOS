@@ -4,7 +4,7 @@
 MemoryManagerDriver::MemoryManagerDriver(uint8_t* block_data_start, uint8_t* heap_start,
                                          uint32_t heap_size)
   : Driver("memory_manager", "The Kernel's Dynamic memory manager", DriverType::MemoryManager)
-  , m_block_data_start(block_data_start)
+  , m_blocks((MemoryBlock**) block_data_start)
   , m_heap_start(heap_start)
   , m_heap_size(heap_size)
   , m_max_block_count(floor(heap_size / BLOCK_SIZE))
@@ -64,7 +64,7 @@ uint32_t MemoryManagerDriver::findFreeBlock(uint32_t block_count)
       for (uint32_t i = 1; i < block_count; i++) {
         MemoryBlock* innerBlock = m_blocks[index + i];
 
-        if (block->allocated) {
+        if (innerBlock->allocated) {
           any_block_allocated = true;
 
           break;

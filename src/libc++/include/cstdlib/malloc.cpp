@@ -18,4 +18,5 @@ void* malloc(size_t size)
   }
 
   // TODO: call the allocate() method of MemoryManagerDriver
+  return NULL;
 }

@@ -4,6 +4,7 @@ CC := i686-elf-g++
 CFLAGS := -c -m32 -ffreestanding -g -O2 -Wall -Wextra -fno-exceptions -fno-rtti \
 					-Wno-error=deprecated-copy \
 					-Wno-error=sized-deallocation \
+					-Wno-error=deprecated-copy \
 					-I src/include \
 					-I src/kernel  \
 					-I src/libc++/include
