@@ -2,6 +2,7 @@ AS := nasm
 ASFLAGS := -f elf
 CC := i686-elf-g++
 CFLAGS := -c -m32 -ffreestanding -g -O2 -Wall -Wextra -fno-exceptions -fno-rtti \
+					-O0\
 					-Wno-error=deprecated-copy \
 					-Wno-error=sized-deallocation \
 					-Wno-error=deprecated-copy \
@@ -46,3 +47,6 @@ run:
 
 clean:
 	rm -rf obj/*
+
+debug:
+	@qemu-system-i386 -cdrom os.iso -s -S

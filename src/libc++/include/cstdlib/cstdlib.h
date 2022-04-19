@@ -16,5 +16,6 @@ void* malloc(size_t size);
 void free(void* ptr);
 
 char itoa(int value, char* s, int base);
+void itoh(int n, char* s);
 
 #endif

@@ -10,7 +10,7 @@
 class TtyDriver : public Driver
 {
   public:
-  TtyDriver();
+  TtyDriver(bool test);
 
   uint32_t getTerminalColor();
   void setTerminalColor(VgaColor text_color, VgaColor background_color);
@@ -20,12 +20,15 @@ class TtyDriver : public Driver
   void write(const char* s);
   void write(const std::string& s);
 
-  private:
+  void writeLine(const char* s);
+
+private:
   uint32_t m_width;
   uint32_t m_height;
   uint32_t m_cursor_x;
   uint32_t m_cursor_y;
   uint32_t m_terminal_color;
+  bool m_test;
 };
 
 #endif

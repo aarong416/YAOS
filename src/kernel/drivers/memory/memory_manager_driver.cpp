@@ -1,13 +1,13 @@
 #include <cmath/cmath.h>
 #include <drivers/memory/memory_manager_driver.h>
 
-MemoryManagerDriver::MemoryManagerDriver(uint8_t* block_data_start, uint8_t* heap_start,
-                                         uint32_t heap_size)
+MemoryManagerDriver::MemoryManagerDriver(uint8_t* block_data_start, uint32_t block_count,
+                                         uint8_t* heap_start, uint32_t heap_size)
   : Driver("memory_manager", "The Kernel's Dynamic memory manager", DriverType::MemoryManager)
   , m_blocks((MemoryBlock**) block_data_start)
   , m_heap_start(heap_start)
   , m_heap_size(heap_size)
-  , m_max_block_count(floor(heap_size / BLOCK_SIZE))
+  , m_max_block_count(block_count)
 {
 }
 
@@ -137,12 +137,12 @@ void* MemoryManagerDriver::allocate(size_t n)
 
 /**
  * Deallocates a previously allocated block or blocks of memory.
- * 
+ *
  * 1. Get the index of the memory block that corresponds with
  *    the address pointer to by `ptr`
  * 2. If there are block to deallocate, deallocate all subsequent
  *    blocks that have been allocated
- * 
+ *
  * @param ptr The address of the memory to deallocate
  */
 void MemoryManagerDriver::deallocate(void* ptr)
@@ -208,7 +208,7 @@ uint32_t MemoryManagerDriver::getIndexFromHeap(void* ptr)
   // it means that a pointer was passed to this function that was not
   // returned from a call to allocate(), or its address was altered,
   // and the result will be a decimal value, but the decimal will be
-  // lost since the function returns an integer. 
+  // lost since the function returns an integer.
   return ((uint8_t*) ptr - m_heap_start) / BLOCK_SIZE;
 }
 

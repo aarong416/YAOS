@@ -16,7 +16,6 @@ A New Operating System
 - Implement string fill constructor
 - Implement std::to_string
 - Ability to print numbers to the screen
-- Ability to convert between between decimal and hex
 - Implement std::string::compare and std::string::operator==
 - Driver manager
 - Debugging function that accepts a memory address and number of bytes, and dumps
@@ -44,3 +43,4 @@ A New Operating System
 ## Issues
 
 - Can't create more than 1 string at a time (can't view the second string, prints nothing)
+- When priting to the screen, only the first half of the screen is used

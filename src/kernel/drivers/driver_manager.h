@@ -17,11 +17,11 @@
 class DriverManager
 {
   public:
-  static uint32_t initialize(uint8_t* start);
-  static uint32_t installDriver(Driver& driver);
-  static uint32_t removeDriver(std::string name);
+  static uint32_t initialize(uint8_t* start, Driver* root_driver, Driver drivers[]);
+  static uint32_t installDriver(Driver* driver);
+  static uint32_t removeDriver(const char* name);
 
-  static Driver* getDriver(std::string name);
+  static Driver* getDriver(const char* name);
   inline static Driver** getAllDrivers() { return m_drivers; };
   inline static uint32_t getDriverCount() { return m_driver_count; };
 
