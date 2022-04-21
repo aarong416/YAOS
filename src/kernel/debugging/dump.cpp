@@ -2,136 +2,143 @@
 #include <cstdlib/cstdlib.h>
 #include <cstring/cstring.h>
 #include <debugging/debugging.h>
+#include <drivers/driver_manager.h>
 #include <drivers/tty/tty_driver.h>
 
-void dump(void* ptr, uint32_t count)
+/**
+ * Prints spaces for the current row so that the ASCII characters for the last
+ * row can be printed below the ASCII characters for the previous row
+ *
+ * @param bytes_per_row The number of hex digits printed per row
+ * @param count         The total number of bytes to dump
+ */
+void print_spaces_until_ascii(uint32_t bytes_per_row, uint32_t count, TtyDriver& tty)
 {
-  char* memory_bytes = (char*) ptr;
+  uint32_t spaces_count = (bytes_per_row - (count % bytes_per_row)) * (CHARACTERS_PER_BYTE - 1);
 
-  int width = 160;
-  int bytes_per_row = floor(width / 4);
-  int row_count = ceil((4 * count) / width);
+  if (spaces_count == bytes_per_row) {
+    spaces_count = 0;
+  }
 
-  TtyDriver tty(true);
+  for (uint32_t i = 0; i < spaces_count; i++) {
+    tty.writeChar(' ');
+  }
+}
 
+// Pruint32_t hex digits
+void print_hex(char row_bytes[], uint32_t bytes_to_print_count, TtyDriver& tty)
+{
   // Stores the hex digit that was converted from an integer
   char s[3];
 
-  for (int row_index = 0; row_index < ceil(count / bytes_per_row); row_index++) {
-    char row_bytes[bytes_per_row];
+  // Convert each byte of memory to a hex digit, and the pruint32_t it
+  for (uint32_t i = 0; i < bytes_to_print_count; i++) {
+    char byte = row_bytes[i];
 
-    // Copy the contents of the current row of memory bytes into the
-    // `row-bytes` array
-    memcpy(row_bytes, memory_bytes + (row_index * bytes_per_row), bytes_per_row);
+    itoh((int) byte, s);
 
-    /* Print all the hex digits for the current row first. After that, print
-        the ASCII representation of the byte in memory */
+    tty.writeChar(s[0]); // TODO: should be able to do write(s): itoa not working properly
+    tty.writeChar(s[1]);
+    tty.writeChar(' ');
+  }
+}
 
-    // Print each hex digit
-    for (int i = 0; i < bytes_per_row; i++) {
-      char byte = row_bytes[i];
+/**
+ * Prints the ASCII representation of each byte in memory. If the byte
+ * is a printable character (32 -> 127 in decimal), pruint32_t it. Otherwise, pruint32_t a
+ * '.' if it isn't.
+ *
+ * @param row_bytes: The bytes to pruint32_t for the current row
+ * @param count:     The number of ASCII characters to print
+ */
+void print_ascii(char row_bytes[], uint32_t count, TtyDriver& tty)
+{
+  for (uint32_t i = 0; i < count; i++) {
+    unsigned char byte = row_bytes[i];
 
-      itoh((int) byte, s);
-
-      tty.write(s);
-      tty.writeChar(' ');
-    }
-
-    // Print the ASCII values for each byte in memory
-    for (int i = 0; i < bytes_per_row; i++) {
-      char byte = row_bytes[i];
-
-      if (byte >= 32 && byte <= 127) {
-        tty.writeChar(byte);
-      } else {
-        tty.writeChar('.');
-      }
+    if (byte >= 32 && byte <= 127) {
+      tty.writeChar(byte);
+    } else {
+      tty.writeChar('.');
     }
   }
 }
 
-// void dump(void* ptr, uint32_t count)
-// {
-//   TtyDriver tty(true);
+/**
+ * Dumps the contents of memory for the current row.
+ *
+ * The first column on the left printd the hexadecimals digits of the contents
+ * of memory, and the column on the right prints the ASCII representation of the
+ * hex digits.
+ *
+ * @param row_bytes     The bytes of memory for the current row
+ * @param bytes_per_row The number of hex digits that are printed on each row
+ * @param count         The total number of bytes in memory to dump
+ * @param is_last_row   True if this is the last row, false otherwise
+ */
+void print_row(char row_bytes[], uint32_t bytes_per_row, uint32_t count, bool is_last_row,
+               TtyDriver& tty)
+{
+  // Determine the number of bytes to print. If this is the last row, only
+  // print the last remaining bytes
+  uint32_t bytes_to_print_count = is_last_row ? (count % bytes_per_row) : bytes_per_row;
 
-//   uint8_t* char_ptr = (uint8_t*) ptr;
+  // Print the hex digits for each byte in the current row
+  print_hex(row_bytes, bytes_to_print_count, tty);
 
-//   uint32_t width = VgaHelper::getVgaWidth(); // The number of characters per row
-//   uint32_t bytes_per_row =
-//     floor(width / 4); // The total number of hex digits that can be printed on each row
-//   uint32_t row_count = ceil((4 * count) / width); // The total number of rows to be printed
+  // If this is the last row, pruint32_t blank spaces until we can pruint32_t ASCII
+  // characters in the ASCII characters column
+  if (is_last_row) {
+    print_spaces_until_ascii(bytes_per_row, count, tty);
+  }
 
-//   char bytes[bytes_per_row];       // The current's rows memory bytes
-//   uint32_t current_byte_index = 0; // The index of the memory byte in the current rows
-//   char s[3];
+  // Pruint32_t the ASCII representation of the bytes in memory for the current row
+  print_ascii(row_bytes, bytes_to_print_count, tty);
+}
 
-//   for (uint32_t i = 0; i < count; i++) {
-//     uint8_t byte = char_ptr[i];
-//     uint32_t row_index = floor(i / bytes_per_row);
+/**
+ * Dump the contents of memory from `ptr` for `count` bytes.
+ *
+ * Hexadecimal values on printed on the left, and their corresponding
+ * ASCII characters are printed on the right.
+ *
+ * @param ptr   The address to start dumping memory from
+ * @param count The number of bytes of memory to dump
+ */
+void dump(void* ptr, uint32_t count, TtyDriver& tty)
+{
+  /**
+   * memory_bytes:  the bytes in memory to dump
+   * width:         the total number of printable characters per line
+   * bytes_per_row: The total number of hex digits printable per row
+   * row_count:     The number of rows
+   */
+  char* memory_bytes = (char*) ptr;
+  uint32_t width = VgaHelper::getVgaWidth();
+  uint32_t bytes_per_row = floor(width / CHARACTERS_PER_BYTE);
+  uint32_t row_count = ceil((CHARACTERS_PER_BYTE * count) / width);
 
-//     bool is_hex_digit = ((current_byte_index != bytes_per_row) && (current_byte_index != count));
-//     bool is_ascii_digit =
-//       (current_byte_index == (bytes_per_row - 1)) || (current_byte_index == (count - 1));
-//     bool is_last_row = i == (count - 1);
+  // Iterate over each byte in memory, treating the bytes in memory as a
+  // two dimensional array of rows and columns instead of a contigous block
+  // of memory. This allows for easily printing all the hex digits first, then
+  // printing all the ASCII characters after.
+  for (uint32_t row_index = 0; row_index < row_count; row_index++) {
+    /**
+     * row_bytes:   The bytes displayed on the current row
+     * is_last_row: True if the current row is the last row, false otherwise
+     * index:       The index into the memory where the bytes for the current
+     *              row starts
+     */
+    char row_bytes[bytes_per_row];
+    bool is_last_row = (row_index == (row_count - 1));
+    void* index = memory_bytes + (row_index * bytes_per_row);
 
-//     // Print the hex digits. TODO: should this be (bytes_per_row - 1)?
-//     if (is_hex_digit) {
-//       // Convert the integer value to hex and print it on the screen
-//       itoh((int) byte, s);
+    // Copy the contents of the current row of memory bytes into an array
+    memcpy(row_bytes, index, bytes_per_row);
 
-//       tty.write(s);
-//       tty.writeChar(' ');
+    // Dump the contents of memory for the current row
+    print_row(row_bytes, bytes_per_row, count, is_last_row, tty);
+  }
 
-//       bytes[current_byte_index++] = byte;
-
-//       // If we are on the last row of bytes to print print spaces up until
-//       // the start of the ASCII characters
-//       if (is_last_row) {
-//         is_ascii_digit = true;
-
-//         // Calculate the number of bytes that haven't been printed
-//         uint32_t spaces_to_print_count =
-//           (row_count * (bytes_per_row * (CHARACTERS_PER_BYTE - 1)) % count);
-
-//         if (spaces_to_print_count == (bytes_per_row * (CHARACTERS_PER_BYTE - 1))) {
-//           spaces_to_print_count = 0;
-//         }
-
-//         // Print blank spaces so ASCII characters can be printed under the
-//         // previous line's ASCII characters
-//         for (uint32_t j = 0; j < spaces_to_print_count; j++) {
-//           tty.writeChar('Y');
-//         }
-//       }
-//     }
-
-//     if (is_ascii_digit) {
-//       // Calculate the number of bytes to print for the current row.
-//       // If this is the last row, only print as many bytes as needed,
-//       // otherwise print until the end of the row
-//       uint32_t bytes_to_print_count =
-//         is_last_row
-//           ? bytes_per_row - ((row_count * (bytes_per_row * (CHARACTERS_PER_BYTE - 1)) % count) /
-//                              (CHARACTERS_PER_BYTE - 1))
-//           : bytes_per_row;
-
-//       if (bytes_to_print_count == 0) {
-//         bytes_to_print_count = bytes_per_row;
-//       }
-
-//       // All hex digits have been printed. Print their corresponding
-//       // ASCII values in the right column
-//       for (uint32_t j = 0; j < bytes_to_print_count; j++) {
-//         uint8_t ascii_char = (char) bytes[j];
-
-//         if (ascii_char >= 32 && ascii_char <= 127) {
-//           tty.writeChar(ascii_char);
-//         } else {
-//           tty.writeChar('.');
-//         }
-//       }
-
-//       current_byte_index = 0;
-//     }
-//   }
-// }
+  tty.writeLine("");
+}

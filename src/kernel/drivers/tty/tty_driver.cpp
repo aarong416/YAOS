@@ -45,14 +45,18 @@ void TtyDriver::writeChar(const char c)
     return;
   }
 
+  if (c == '\t') {
+    m_cursor_x += (2 * 2);
+  }
+
   uint32_t width = VgaHelper::getVgaWidth();
-  uint32_t i = (m_cursor_y * width) + m_cursor_x;
+  uint32_t i =
+    (m_cursor_y * width) + (m_cursor_x * 2); // 1 byte for the character, 1 byte for color
   uint8_t* vidmem = (uint8_t*) VIDEO_MEMORY;
 
-  vidmem[i++] = c;
-  m_cursor_x++;
+  vidmem[i] = c;
+  vidmem[i + 1] = m_terminal_color;
 
-  vidmem[i] = m_terminal_color;
   m_cursor_x++;
 }
 
@@ -87,9 +91,20 @@ void TtyDriver::write(const std::string& str)
  */
 void TtyDriver::writeLine(const char* s)
 {
-  for (size_t i = 0; i < strlen(s); i++) {
-    writeChar(s[i]);
-  }
-
+  write(s);
   writeChar('\n');
+}
+
+/**
+ * Writes an integer to the screen
+ *
+ * @param n The integer to write
+ */
+void TtyDriver::writeInt(int n)
+{
+  char s[11];
+
+  itoa(n, s, 10);
+
+  write(s);
 }

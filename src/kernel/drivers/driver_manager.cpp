@@ -7,7 +7,7 @@
 // Static variables have to be initialized outside the class
 uint16_t DriverManager::m_index = 0;
 uint16_t DriverManager::m_driver_count = 0;
-Driver** DriverManager::m_drivers = {nullptr};
+Driver** DriverManager::m_drivers = nullptr;
 bool DriverManager::m_is_initialized = false;
 
 /**
@@ -21,9 +21,9 @@ uint32_t DriverManager::initialize(uint8_t* start, Driver* root_driver, Driver d
 {
   m_is_initialized = true;
 
-  installDriver(root_driver);
-
   memset(start, 0, sizeof(Driver) * MAX_DRIVERS); // PROBLEM: all drivers are bigger than Driver
+
+  installDriver(root_driver);
 
   m_drivers = (Driver**) start;
 
@@ -63,20 +63,20 @@ uint32_t DriverManager::initialize(uint8_t* start, Driver* root_driver, Driver d
  */
 uint32_t DriverManager::installDriver(Driver* driver)
 {
-  // if (!m_is_initialized) {
-  //   // TODO: logging: driver manager not initialized
-  //   return DRIVER_MANAGER_NOT_INITIALIZED;
-  // }
+  if (!m_is_initialized) {
+    // TODO: logging: driver manager not initialized
+    return DRIVER_MANAGER_NOT_INITIALIZED;
+  }
 
-  // if (m_driver_count >= MAX_DRIVERS) {
-  //   // TODO: logging: too many drivers
-  //   return DRIVER_MANAGER_TOO_MANY_DRIVERS;
-  // }
+  if (m_driver_count >= MAX_DRIVERS) {
+    // TODO: logging: too many drivers
+    return DRIVER_MANAGER_TOO_MANY_DRIVERS;
+  }
 
-  // if (driver.isInstalled()) {
-  //   // TODO: logging: driver is already installed
-  //   return DRIVER_SUCCESS;
-  // }
+  if (driver->isInstalled()) {
+    // TODO: logging: driver is already installed
+    return DRIVER_SUCCESS;
+  }
 
   // Set the driver as installed so that it can be used
   driver->setInstalled(true);
@@ -125,19 +125,11 @@ uint32_t DriverManager::installDriver(Driver* driver)
  */
 Driver* DriverManager::getDriver(const char* name)
 {
-  TtyDriver tty(true);
-
-  tty.write(((TtyDriver*) m_drivers[2])->isInstalled() ? "T" : "F");
-
   return m_drivers[0];
 
   // TODO: compare driver name with passed in driver name
   for (uint16_t i = 0; i < MAX_DRIVERS; i++) {
     Driver* driver = m_drivers[i];
-
-    TtyDriver tty(true);
-
-    tty.write(driver->getName());
 
     if (driver != nullptr && strcmp(driver->getName(), name) == 0) {
       return driver;

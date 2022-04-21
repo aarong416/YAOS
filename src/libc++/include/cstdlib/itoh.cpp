@@ -6,7 +6,8 @@ void itoh(int n, char* s)
 {
   if (n == 0) {
     s[0] = '0';
-    s[1] = '\0';
+    s[1] = '0';
+    s[2] = '\0';
 
     return;
   }
@@ -23,7 +24,12 @@ void itoh(int n, char* s)
     len++;
   }
 
-  s[len] = '\0';
+  if (len % 2 != 0) {
+    s[len] = '0';
+    s[len + 1] = '\0';
+  } else {
+    s[len] = '\0';
+  }
 
   strrev(s);
 }

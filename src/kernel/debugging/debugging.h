@@ -1,11 +1,12 @@
 #ifndef DEBUGGING_H
 #define DEBUGGING_H
 
-#define CHARACTERS_PER_BYTE 4 // 2 bytes for the hex digits, 1 for the space,
-                              // and 1 for the ascii value
+// 2 bytes for the hex digits, 1 for the space, and 1 for the ASCII character
+#define CHARACTERS_PER_BYTE 4
 
 #include <cstdint.h>
+#include <drivers/tty/tty_driver.h>
 
-void dump(void* ptr, uint32_t count);
+void dump(void* ptr, uint32_t count, TtyDriver& tty);
 
 #endif

@@ -9,7 +9,7 @@
 
 class TtyDriver : public Driver
 {
-  public:
+public:
   TtyDriver(bool test);
 
   uint32_t getTerminalColor();
@@ -19,6 +19,9 @@ class TtyDriver : public Driver
   void writeChar(const char c);
   void write(const char* s);
   void write(const std::string& s);
+  void writeInt(int n);
+
+  // TODO: add a writeFormatted() function that is similar to printf()
 
   void writeLine(const char* s);
 

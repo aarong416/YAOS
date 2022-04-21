@@ -13,28 +13,24 @@ A New Operating System
 
 ## TODO
 
+- Driver manager
+- Implement `cout`
+
+- Memory manager driver
+- Logging function
+
 - Implement string fill constructor
 - Implement std::to_string
-- Ability to print numbers to the screen
 - Implement std::string::compare and std::string::operator==
-- Driver manager
-- Debugging function that accepts a memory address and number of bytes, and dumps
-  the contents of memory at that address, for the specified number of bytes
-- Implement `cout`
-- Logging function
-- (Implement vectors)
-
-- Reimplement dynamic memory management
-- Memory manager driver
 
 - Get info from GRUB (screen size, available memory etc)
 - GDT
+- Timer
 - Keyboard driver
 - Shell
 - IDT
 - Exceptions
 - System calls
-- Timer
 - Filesystem
 - Networking
 - Processes
@@ -43,4 +39,4 @@ A New Operating System
 ## Issues
 
 - Can't create more than 1 string at a time (can't view the second string, prints nothing)
-- When priting to the screen, only the first half of the screen is used
+- `itoa` not working properly. Refer to `dump` in `dump.cpp`
