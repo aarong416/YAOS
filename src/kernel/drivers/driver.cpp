@@ -13,6 +13,7 @@ Driver::Driver(const char* name, const char* description, DriverType type)
   : m_name(name)
   , m_description(description)
   , m_type(type)
+  , m_installed(false)
 {
 }
 

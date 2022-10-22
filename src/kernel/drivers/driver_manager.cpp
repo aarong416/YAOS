@@ -7,7 +7,7 @@
 // Static variables have to be initialized outside the class
 uint16_t DriverManager::m_index = 0;
 uint16_t DriverManager::m_driver_count = 0;
-Driver** DriverManager::m_drivers = nullptr;
+Driver* DriverManager::m_drivers[MAX_DRIVERS] = {nullptr};
 bool DriverManager::m_is_initialized = false;
 
 /**
@@ -17,31 +17,15 @@ bool DriverManager::m_is_initialized = false;
  * @param root_driver A driver that needs to be installed before all other drivers are installed
  * @param drivers     The drivers to install
  */
-uint32_t DriverManager::initialize(uint8_t* start, Driver* root_driver, Driver drivers[])
+uint32_t DriverManager::initialize(uint8_t* start, Driver** drivers)
 {
-  m_is_initialized = true;
+  for (uint32_t i = 0; i < MAX_DRIVERS; i++) {
+    Driver* driver = drivers[i];
 
-  memset(start, 0, sizeof(Driver) * MAX_DRIVERS); // PROBLEM: all drivers are bigger than Driver
-
-  installDriver(root_driver);
-
-  m_drivers = (Driver**) start;
-
-  // TtyDriver* tty = (TtyDriver*) DriverManager::getDriver("tty");
-
-  // tty->write("Installing drivers: ");
-
-  // uint32_t driver_count = sizeof(drivers);
-
-  // for (uint32_t i = 0; i < driver_count; i++) {
-  //   Driver driver = drivers[i];
-
-  //   tty->write(driver.getName());
-
-  //   if (i != driver_count) {
-  //     tty->write(", ");
-  //   }
-  // }
+    if (driver != nullptr) {
+      installDriver(*driver);
+    }
+  }
 
   return DRIVER_SUCCESS;
 }
@@ -61,7 +45,7 @@ uint32_t DriverManager::initialize(uint8_t* start, Driver* root_driver, Driver d
  *                     - the maximum numbers of installed drivers has been reached
  *                     - the driver has already been installed
  */
-uint32_t DriverManager::installDriver(Driver* driver)
+uint32_t DriverManager::installDriver(Driver& driver)
 {
   if (!m_is_initialized) {
     // TODO: logging: driver manager not initialized
@@ -73,15 +57,15 @@ uint32_t DriverManager::installDriver(Driver* driver)
     return DRIVER_MANAGER_TOO_MANY_DRIVERS;
   }
 
-  if (driver->isInstalled()) {
+  if (driver.isInstalled()) {
     // TODO: logging: driver is already installed
     return DRIVER_SUCCESS;
   }
 
   // Set the driver as installed so that it can be used
-  driver->setInstalled(true);
+  driver.setInstalled(true);
 
-  m_drivers[m_index++] = driver;
+  m_drivers[m_index++] = &driver;
   m_driver_count++;
 
   return DRIVER_SUCCESS;
@@ -120,13 +104,10 @@ uint32_t DriverManager::installDriver(Driver* driver)
  *
  * @param name The name of the driver
  *
- * @returns Driver|nullptr Returns the driver if it exists, or `nullptr`
- * otherwise
+ * @returns Driver|nullptr Returns the driver if it exists, or `nullptr` otherwise
  */
 Driver* DriverManager::getDriver(const char* name)
 {
-  return m_drivers[0];
-
   // TODO: compare driver name with passed in driver name
   for (uint16_t i = 0; i < MAX_DRIVERS; i++) {
     Driver* driver = m_drivers[i];

@@ -1,14 +1,15 @@
 #include <cmath/cmath.h>
 #include <drivers/memory/memory_manager_driver.h>
 
-MemoryManagerDriver::MemoryManagerDriver(uint8_t* block_data_start, uint32_t block_count,
-                                         uint8_t* heap_start, uint32_t heap_size)
-  : Driver("memory_manager", "The Kernel's Dynamic memory manager", DriverType::MemoryManager)
-  , m_blocks((MemoryBlock**) block_data_start)
-  , m_heap_start(heap_start)
-  , m_heap_size(heap_size)
-  , m_max_block_count(block_count)
+void MemoryManagerDriver::initialize(uint8_t* block_data_start, uint32_t block_count,
+                                     uint8_t* heap_start, uint32_t heap_size)
 {
+  Driver("memory_manager", "The Kernel's dynamic memory manager", DriverType::MemoryManager);
+
+  m_blocks = ((MemoryBlock**) block_data_start);
+  m_heap_start = heap_start;
+  m_heap_size = heap_size;
+  m_max_block_count = block_count;
 }
 
 /**

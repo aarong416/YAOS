@@ -4,7 +4,6 @@
 #define MAX_MEMORY_NODES 64
 
 #include <cstdint.h>
-#include <logging/logger.h>
 #include <multiboot/multiboot2.h>
 
 using namespace std;

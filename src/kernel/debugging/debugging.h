@@ -5,8 +5,7 @@
 #define CHARACTERS_PER_BYTE 4
 
 #include <cstdint.h>
-#include <drivers/tty/tty_driver.h>
 
-void dump(void* ptr, uint32_t count, TtyDriver& tty);
+void dump(void* ptr, uint32_t count);
 
 #endif

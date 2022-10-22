@@ -1,4 +1,3 @@
-#include <cstdlib/cstdlib.h>
 #include <cstring/cstring.h>
 #include <debugging/debugging.h>
 #include <drivers/driver_manager.h>
@@ -6,31 +5,33 @@
 #include <drivers/tty/tty_driver.h>
 #include <kernel.h>
 #include <logging/logger.h>
-#include <memory/memory.h>
 
 void setup_drivers()
 {
   // Set up the TTY driver first so that we can write to the screen
   // as early as possible
   // TtyDriver tty(false);
-  // DriverManager::installDriver(&tty);
 
   // // TODO: get the size of avaialable memory from GRUB
   // uint32_t heap_size = 100 * 1024 * 1024;
-
   // uint8_t* block_data_start = kernel_end;
-  // uint32_t block_count = floor(heap_size / BLOCK_SIZE);
+  // uint32_t block_count = ceil(heap_size / BLOCK_SIZE);
   // uint8_t* heap_start = block_data_start = (uint8_t*) (sizeof(MemoryBlock) * block_count);
 
-  // initialize_memory_blocks(kernel_end, block_count);
+  // // memset(kernel_end, 0, block_count * sizeof(MemoryBlock));
 
-  // MemoryManagerDriver memory_manager(block_data_start, block_count, heap_start, heap_size);
+  // MemoryManagerDriver* memory_manager = (MemoryManagerDriver*) kernel_end;
 
-  // Driver drivers[] = {memory_manager};
-  // Driver drivers[] = {};
+  // memory_manager->initialize(kernel_end, block_count, heap_start, heap_size);
 
-  // Store the drivers in memory directly after the kernel
-  // DriverManager::initialize(kernel_end, &tty, drivers);
+  // // (kernel_end, 3000, kernel_end, 3000);
+
+  // Driver* drivers[1];
+
+  // drivers[0] = memory_manager;
+
+  // // Store the drivers in memory directly after the kernel
+  // DriverManager::initialize(kernel_end + sizeof(MemoryManagerDriver), &tty, drivers);
 
   // kernel_info.heap_start = initialized_memory.heap_start;
   // kernel_info.heap_size = heap_size;
@@ -39,22 +40,36 @@ void setup_drivers()
 // The entry point for the kernel after it has been loaded by the bootloader
 void kernel_main()
 {
-  // kernel_info.kernel_end = kernel_end;
-
   // Set up and install all drivers
   // setup_drivers();
 
   TtyDriver tty(true);
+  MemoryManagerDriver* memory_manager;
 
-  DriverManager::initialize(kernel_end, &tty, {});
+  Driver drivers[2] = {tty, *memory_manager};
 
-  // TtyDriver* tty_driver = (TtyDriver*) DriverManager::getDriver("tty");
+  tty.writeLine("Hello, world!");
 
-  // tty_driver->write("XAB");
+  // Logger::log("Logging statement here");
 
-  // TtyDriver tty(true);
+  // Driver** drivers = DriverManager::getAllDrivers();
 
-  // tty.writeInt(kernel_end[62]);
+  // for (int i = 0; i < 2; i++) {
+  //   Driver* driver = drivers[i];
 
-  dump(kernel_end, 305, tty);
+  //   if (driver != nullptr) {
+  //     tty->write("Name: ");
+  //     // tty->writeLine(driver->getName());
+
+  //     // tty->write("Description: ");
+  //     // tty->writeLine(driver->getDescription());
+
+  //     // tty->write("Status: ");
+  //     // tty->writeLine(driver->isInstalled() ? "Installed" : "Not installed");
+
+  //     // tty->writeLine("");
+  //   }
+  // }
+
+  // dump((void*) tty_driver, 400);
 }

@@ -10,6 +10,8 @@ enum DriverType { Io, Keyboard, MemoryManager, Tty };
  */
 class Driver
 {
+  friend class DriverManager;
+
 public:
   Driver(const char* name, const char* description, DriverType type);
 
@@ -18,13 +20,13 @@ public:
   DriverType getType();
   bool isInstalled();
 
-  void setInstalled(bool installed);
-
 private:
   const char* m_name;
   const char* m_description;
   DriverType m_type;
   bool m_installed;
+
+  void setInstalled(bool installed);
 };
 
 #endif

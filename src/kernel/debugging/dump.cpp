@@ -12,8 +12,10 @@
  * @param bytes_per_row The number of hex digits printed per row
  * @param count         The total number of bytes to dump
  */
-void print_spaces_until_ascii(uint32_t bytes_per_row, uint32_t count, TtyDriver& tty)
+void print_spaces_until_ascii(uint32_t bytes_per_row, uint32_t count)
 {
+  TtyDriver* tty = (TtyDriver*) DriverManager::getDriver("tty");
+
   uint32_t spaces_count = (bytes_per_row - (count % bytes_per_row)) * (CHARACTERS_PER_BYTE - 1);
 
   if (spaces_count == bytes_per_row) {
@@ -21,13 +23,15 @@ void print_spaces_until_ascii(uint32_t bytes_per_row, uint32_t count, TtyDriver&
   }
 
   for (uint32_t i = 0; i < spaces_count; i++) {
-    tty.writeChar(' ');
+    tty->writeChar(' ');
   }
 }
 
 // Pruint32_t hex digits
-void print_hex(char row_bytes[], uint32_t bytes_to_print_count, TtyDriver& tty)
+void print_hex(char row_bytes[], uint32_t bytes_to_print_count)
 {
+  TtyDriver* tty = (TtyDriver*) DriverManager::getDriver("tty");
+
   // Stores the hex digit that was converted from an integer
   char s[3];
 
@@ -37,9 +41,9 @@ void print_hex(char row_bytes[], uint32_t bytes_to_print_count, TtyDriver& tty)
 
     itoh((int) byte, s);
 
-    tty.writeChar(s[0]); // TODO: should be able to do write(s): itoa not working properly
-    tty.writeChar(s[1]);
-    tty.writeChar(' ');
+    tty->writeChar(s[0]); // TODO: should be able to do write(s): itoa not working properly
+    tty->writeChar(s[1]);
+    tty->writeChar(' ');
   }
 }
 
@@ -51,15 +55,17 @@ void print_hex(char row_bytes[], uint32_t bytes_to_print_count, TtyDriver& tty)
  * @param row_bytes: The bytes to pruint32_t for the current row
  * @param count:     The number of ASCII characters to print
  */
-void print_ascii(char row_bytes[], uint32_t count, TtyDriver& tty)
+void print_ascii(char row_bytes[], uint32_t count)
 {
+  TtyDriver* tty = (TtyDriver*) DriverManager::getDriver("tty");
+
   for (uint32_t i = 0; i < count; i++) {
     unsigned char byte = row_bytes[i];
 
     if (byte >= 32 && byte <= 127) {
-      tty.writeChar(byte);
+      tty->writeChar(byte);
     } else {
-      tty.writeChar('.');
+      tty->writeChar('.');
     }
   }
 }
@@ -76,24 +82,23 @@ void print_ascii(char row_bytes[], uint32_t count, TtyDriver& tty)
  * @param count         The total number of bytes in memory to dump
  * @param is_last_row   True if this is the last row, false otherwise
  */
-void print_row(char row_bytes[], uint32_t bytes_per_row, uint32_t count, bool is_last_row,
-               TtyDriver& tty)
+void print_row(char row_bytes[], uint32_t bytes_per_row, uint32_t count, bool is_last_row)
 {
   // Determine the number of bytes to print. If this is the last row, only
   // print the last remaining bytes
   uint32_t bytes_to_print_count = is_last_row ? (count % bytes_per_row) : bytes_per_row;
 
   // Print the hex digits for each byte in the current row
-  print_hex(row_bytes, bytes_to_print_count, tty);
+  print_hex(row_bytes, bytes_to_print_count);
 
   // If this is the last row, pruint32_t blank spaces until we can pruint32_t ASCII
   // characters in the ASCII characters column
   if (is_last_row) {
-    print_spaces_until_ascii(bytes_per_row, count, tty);
+    print_spaces_until_ascii(bytes_per_row, count);
   }
 
   // Pruint32_t the ASCII representation of the bytes in memory for the current row
-  print_ascii(row_bytes, bytes_to_print_count, tty);
+  print_ascii(row_bytes, bytes_to_print_count);
 }
 
 /**
@@ -105,8 +110,10 @@ void print_row(char row_bytes[], uint32_t bytes_per_row, uint32_t count, bool is
  * @param ptr   The address to start dumping memory from
  * @param count The number of bytes of memory to dump
  */
-void dump(void* ptr, uint32_t count, TtyDriver& tty)
+void dump(void* ptr, uint32_t count)
 {
+  TtyDriver* tty = (TtyDriver*) DriverManager::getDriver("tty");
+
   /**
    * memory_bytes:  the bytes in memory to dump
    * width:         the total number of printable characters per line
@@ -137,8 +144,8 @@ void dump(void* ptr, uint32_t count, TtyDriver& tty)
     memcpy(row_bytes, index, bytes_per_row);
 
     // Dump the contents of memory for the current row
-    print_row(row_bytes, bytes_per_row, count, is_last_row, tty);
+    print_row(row_bytes, bytes_per_row, count, is_last_row);
   }
 
-  tty.writeLine("");
+  tty->writeLine("");
 }
