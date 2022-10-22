@@ -6,70 +6,49 @@
 #include <kernel.h>
 #include <logging/logger.h>
 
-void setup_drivers()
-{
-  // Set up the TTY driver first so that we can write to the screen
-  // as early as possible
-  // TtyDriver tty(false);
-
-  // // TODO: get the size of avaialable memory from GRUB
-  // uint32_t heap_size = 100 * 1024 * 1024;
-  // uint8_t* block_data_start = kernel_end;
-  // uint32_t block_count = ceil(heap_size / BLOCK_SIZE);
-  // uint8_t* heap_start = block_data_start = (uint8_t*) (sizeof(MemoryBlock) * block_count);
-
-  // // memset(kernel_end, 0, block_count * sizeof(MemoryBlock));
-
-  // MemoryManagerDriver* memory_manager = (MemoryManagerDriver*) kernel_end;
-
-  // memory_manager->initialize(kernel_end, block_count, heap_start, heap_size);
-
-  // // (kernel_end, 3000, kernel_end, 3000);
-
-  // Driver* drivers[1];
-
-  // drivers[0] = memory_manager;
-
-  // // Store the drivers in memory directly after the kernel
-  // DriverManager::initialize(kernel_end + sizeof(MemoryManagerDriver), &tty, drivers);
-
-  // kernel_info.heap_start = initialized_memory.heap_start;
-  // kernel_info.heap_size = heap_size;
-}
+// Information that is important for the kernel
+KernelInfo kinfo = {};
 
 // The entry point for the kernel after it has been loaded by the bootloader
 void kernel_main()
 {
-  // Set up and install all drivers
-  // setup_drivers();
+  uint32_t memory_size = 64 * 1024 * 1024;       // TODO: get this from GRUB
+  uint32_t heap_size = memory_size * (10 / 100); // The heap is currently 10% of the total memory
+  uint32_t total_memory_blocks = floor(heap_size / BLOCK_SIZE);
 
-  TtyDriver tty(true);
-  MemoryManagerDriver* memory_manager;
+  kinfo.end = kernel_end;
+  kinfo.heap_size = heap_size;
 
-  Driver drivers[2] = {tty, *memory_manager};
+  kinfo.mm_start = (uint8_t*) memset(kinfo.end + 1, 0, total_memory_blocks * sizeof(MemoryBlock));
+  kinfo.heap_start = kinfo.mm_start + (total_memory_blocks * sizeof(MemoryBlock));
 
-  tty.writeLine("Hello, world!");
+  // SEPARATOR
+  // SEPARATOR
+  // SEPARATOR
 
-  // Logger::log("Logging statement here");
+  TtyDriver tty(false);
+  MemoryManagerDriver memoryManagerDriver(kinfo.mm_start, total_memory_blocks, kinfo.heap_start,
+                                          kinfo.heap_size);
 
-  // Driver** drivers = DriverManager::getAllDrivers();
+  DriverManager driver_manager;
 
-  // for (int i = 0; i < 2; i++) {
-  //   Driver* driver = drivers[i];
+  driver_manager.installDriver(&tty);
+  driver_manager.installDriver(&memoryManagerDriver);
 
-  //   if (driver != nullptr) {
-  //     tty->write("Name: ");
-  //     // tty->writeLine(driver->getName());
+  tty.write("Installed drivers (");
+  tty.writeInt(driver_manager.getDriverCount());
+  tty.writeLine("):");
 
-  //     // tty->write("Description: ");
-  //     // tty->writeLine(driver->getDescription());
+  memoryManagerDriver.allocate(1024);
 
-  //     // tty->write("Status: ");
-  //     // tty->writeLine(driver->isInstalled() ? "Installed" : "Not installed");
+  Driver** drivers = driver_manager.getAllDrivers();
 
-  //     // tty->writeLine("");
-  //   }
-  // }
+  for (uint8_t i = 0; i < driver_manager.getDriverCount(); i++) {
+    Driver* driver = drivers[i];
 
-  // dump((void*) tty_driver, 400);
+    tty.write("  ");
+    tty.write(driver->getName());
+    tty.write(": ");
+    tty.writeLine(driver->getDescription());
+  }
 }

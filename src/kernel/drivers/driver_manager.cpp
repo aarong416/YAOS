@@ -4,30 +4,12 @@
 #include <drivers/driver_manager.h>
 #include <drivers/tty/tty_driver.h>
 
-// Static variables have to be initialized outside the class
-uint16_t DriverManager::m_index = 0;
-uint16_t DriverManager::m_driver_count = 0;
-Driver* DriverManager::m_drivers[MAX_DRIVERS] = {nullptr};
-bool DriverManager::m_is_initialized = false;
-
-/**
- * Initialized the driver manager by setting where the drivers will be stored
- *
- * @param start       The address in memory at which drivers will be stored
- * @param root_driver A driver that needs to be installed before all other drivers are installed
- * @param drivers     The drivers to install
- */
-uint32_t DriverManager::initialize(uint8_t* start, Driver** drivers)
+DriverManager::DriverManager()
 {
+  // Set all drivers to null pointers initially
   for (uint32_t i = 0; i < MAX_DRIVERS; i++) {
-    Driver* driver = drivers[i];
-
-    if (driver != nullptr) {
-      installDriver(*driver);
-    }
+    m_drivers[i] = nullptr;
   }
-
-  return DRIVER_SUCCESS;
 }
 
 /**
@@ -45,27 +27,23 @@ uint32_t DriverManager::initialize(uint8_t* start, Driver** drivers)
  *                     - the maximum numbers of installed drivers has been reached
  *                     - the driver has already been installed
  */
-uint32_t DriverManager::installDriver(Driver& driver)
+uint32_t DriverManager::installDriver(Driver* driver)
 {
-  if (!m_is_initialized) {
-    // TODO: logging: driver manager not initialized
-    return DRIVER_MANAGER_NOT_INITIALIZED;
-  }
-
   if (m_driver_count >= MAX_DRIVERS) {
     // TODO: logging: too many drivers
     return DRIVER_MANAGER_TOO_MANY_DRIVERS;
   }
 
-  if (driver.isInstalled()) {
+  if (driver->isInstalled()) {
     // TODO: logging: driver is already installed
     return DRIVER_SUCCESS;
   }
 
   // Set the driver as installed so that it can be used
-  driver.setInstalled(true);
+  driver->setInstalled(true);
 
-  m_drivers[m_index++] = &driver;
+  // TODO: this will become a problem when drivers are removed and the index is reset
+  m_drivers[m_index++] = driver;
   m_driver_count++;
 
   return DRIVER_SUCCESS;
@@ -86,6 +64,8 @@ uint32_t DriverManager::installDriver(Driver& driver)
 //  *              Reasons for failure:
 //  *                  - the driver by the specified ID does not exist
 //  */
+// TODO: this needs to reshuffle all drivers in the array so that there are no
+//       empty items (nullptr's) in the array between drivers
 // uint32_t DriverManager::removeDriver(std::string name)
 // {
 //     if (id >= MAX_DRIVERS) {

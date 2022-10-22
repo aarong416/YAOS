@@ -1,15 +1,14 @@
 #include <cmath/cmath.h>
 #include <drivers/memory/memory_manager_driver.h>
 
-void MemoryManagerDriver::initialize(uint8_t* block_data_start, uint32_t block_count,
-                                     uint8_t* heap_start, uint32_t heap_size)
+MemoryManagerDriver::MemoryManagerDriver(uint8_t* memory_block_array_start, uint32_t block_count,
+                                         uint8_t* heap_start, uint32_t heap_size)
+  : Driver("memory_manager", "The Kernel's dynamic memory manager", DriverType::MemoryManager)
+  , m_blocks((MemoryBlock**) memory_block_array_start)
+  , m_heap_start(heap_start)
+  , m_heap_size(heap_size)
+  , m_max_block_count(block_count)
 {
-  Driver("memory_manager", "The Kernel's dynamic memory manager", DriverType::MemoryManager);
-
-  m_blocks = ((MemoryBlock**) block_data_start);
-  m_heap_start = heap_start;
-  m_heap_size = heap_size;
-  m_max_block_count = block_count;
 }
 
 /**
@@ -32,14 +31,14 @@ uint32_t MemoryManagerDriver::findFreeBlock(uint32_t block_count)
 
   while (!block_found) {
     // Don't try searching past the end of the heap.
-    // m_max_block_count - 1 since index is always 1 less than the max block count.
+    // m_max_block_count - 1 is used since `index` is always 1 less than the max block count.
     if (index >= (m_max_block_count - 1)) {
       return m_max_block_count;
     }
 
     MemoryBlock* block = m_blocks[index];
 
-    /* The block has been allocated, move on */
+    /* The block has already been allocated, move on */
     if (block->allocated) {
       index += block->block_count;
 

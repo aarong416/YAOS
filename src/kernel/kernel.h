@@ -1,8 +1,6 @@
 #ifndef _KERNEL_H
 #define _KERNEL_H
 
-#define MAX_MEMORY_NODES 64
-
 #include <cstdint.h>
 #include <multiboot/multiboot2.h>
 
@@ -12,11 +10,11 @@ extern "C" void kernel_main();
 extern uint8_t* kernel_end;
 
 struct KernelInfo {
-  uint8_t* kernel_end;
-  uint8_t* heap_start;
-  uint32_t heap_size;
+  uint8_t* end;        // The end of the kernel
+  uint8_t* mm_start;   // The start of the memory manager driver
+  uint8_t* heap_start; // The start of the heap
+  uint32_t heap_size;  // The size of the heap, in bytes
+  uint8_t* fs_start;   // The starting address of the filesystem in memory
 };
-
-// KernelInfo kernel_info;
 
 #endif

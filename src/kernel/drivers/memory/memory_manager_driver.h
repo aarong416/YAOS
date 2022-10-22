@@ -17,12 +17,13 @@ class MemoryManagerDriver : public Driver
   friend class Driver;
 
 public:
-  MemoryManagerDriver();
-  void initialize(uint8_t* block_data_start, uint32_t block_count, uint8_t* heap_start,
-                  uint32_t heap_size);
+  MemoryManagerDriver(uint8_t* memory_block_array_start, uint32_t block_count, uint8_t* heap_start,
+                      uint32_t heap_size);
   uint32_t findFreeBlock(uint32_t block_count);
   void* allocate(size_t n);
   void deallocate(void* ptr);
+
+  // TODO: these methods should be private
   uint32_t getIndexFromHeap(void* ptr);
   uint8_t* heapAddressFromIndex(uint32_t index);
 

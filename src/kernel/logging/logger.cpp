@@ -11,7 +11,7 @@
  */
 void Logger::log(const char* s)
 {
-  TtyDriver* tty = (TtyDriver*) DriverManager::getDriver("tty");
+  // TtyDriver* tty = (TtyDriver*) DriverManager::getDriver("tty");
 
-  tty->writeChar('c');
+  // tty->writeChar('c');
 }
