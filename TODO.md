@@ -1,11 +1,12 @@
 # A list of tasks to complete
 
-- Put all function definitions for debugging inside the header file
 - Driver manager
-- Implement `cout`
+- Put all function definitions for debugging inside the header file
+
+- malloc() and free()
 
 - Logging function
-- malloc() and free()
+- Implement `cout`
 
 - Implement string fill constructor
 - Implement std::to_string

@@ -13,7 +13,6 @@ Driver::Driver(const char* name, const char* description, DriverType type)
   : m_name(name)
   , m_description(description)
   , m_type(type)
-  , m_installed(false)
 {
 }
 
@@ -30,14 +29,4 @@ const char* Driver::getDescription()
 DriverType Driver::getType()
 {
   return m_type;
-}
-
-bool Driver::isInstalled()
-{
-  return m_installed;
-}
-
-void Driver::setInstalled(bool installed)
-{
-  m_installed = installed;
 }

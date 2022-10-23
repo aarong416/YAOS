@@ -10,7 +10,7 @@
 class TtyDriver : public Driver
 {
 public:
-  TtyDriver(bool test);
+  TtyDriver();
 
   uint32_t getTerminalColor();
   void setTerminalColor(VgaColor text_color, VgaColor background_color);
@@ -31,7 +31,6 @@ private:
   uint32_t m_cursor_x;
   uint32_t m_cursor_y;
   uint32_t m_terminal_color;
-  bool m_test;
 };
 
 #endif

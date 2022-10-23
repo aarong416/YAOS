@@ -1,6 +1,5 @@
 [bits 32]
 
-
 extern kernel_main
 global start
 
@@ -38,6 +37,6 @@ start:
 
 section .bss
 
-resb 8192
+resb 16384
 
 stack_space:

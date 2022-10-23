@@ -34,14 +34,6 @@ uint32_t DriverManager::installDriver(Driver* driver)
     return DRIVER_MANAGER_TOO_MANY_DRIVERS;
   }
 
-  if (driver->isInstalled()) {
-    // TODO: logging: driver is already installed
-    return DRIVER_SUCCESS;
-  }
-
-  // Set the driver as installed so that it can be used
-  driver->setInstalled(true);
-
   // TODO: this will become a problem when drivers are removed and the index is reset
   m_drivers[m_index++] = driver;
   m_driver_count++;

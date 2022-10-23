@@ -4,9 +4,8 @@
 #include <drivers/tty/tty_driver.h>
 #include <string/string.h>
 
-TtyDriver::TtyDriver(bool test)
+TtyDriver::TtyDriver()
   : Driver("tty", "A TTY driver for writing to the screen", DriverType::Tty)
-  , m_test(test)
 {
   m_width = VgaHelper::getVgaWidth();
   m_height = VgaHelper::getVgaHeight();
@@ -32,11 +31,6 @@ void TtyDriver::setTerminalColor(VgaColor text_color, VgaColor background_color)
  */
 void TtyDriver::writeChar(const char c)
 {
-  // The driver needs to be installed before text can be written to the screen
-  if (!m_test && !isInstalled()) {
-    return;
-  }
-
   // Go to the beginning of the next line when a new line character is encountered
   if (c == '\n') {
     m_cursor_x = 0;

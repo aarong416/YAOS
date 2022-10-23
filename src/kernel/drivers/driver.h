@@ -18,15 +18,11 @@ public:
   const char* getName();
   const char* getDescription();
   DriverType getType();
-  bool isInstalled();
 
 private:
   const char* m_name;
   const char* m_description;
   DriverType m_type;
-  bool m_installed;
-
-  void setInstalled(bool installed);
 };
 
 #endif

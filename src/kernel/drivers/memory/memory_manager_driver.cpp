@@ -5,9 +5,9 @@ MemoryManagerDriver::MemoryManagerDriver(uint8_t* memory_block_array_start, uint
                                          uint8_t* heap_start, uint32_t heap_size)
   : Driver("memory_manager", "The Kernel's dynamic memory manager", DriverType::MemoryManager)
   , m_blocks((MemoryBlock**) memory_block_array_start)
+  , m_max_block_count(block_count)
   , m_heap_start(heap_start)
   , m_heap_size(heap_size)
-  , m_max_block_count(block_count)
 {
 }
 
