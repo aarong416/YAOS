@@ -10,15 +10,19 @@
 KernelInfo kinfo = {};
 
 TtyDriver tty;
+MemoryManagerDriver memoryManager;
 
 void setup_drivers()
 {
   tty = TtyDriver();
-  MemoryManagerDriver memoryManagerDriver(kinfo.mm_start, kinfo.heap_block_count, kinfo.heap_start,
-                                          kinfo.heap_size);
+  memoryManager = MemoryManagerDriver();
+
+  tty.initialize();
+  memoryManager.initialize(kinfo.mm_start, kinfo.heap_block_count, kinfo.heap_start,
+                           kinfo.heap_size);
 
   DriverManager::installDriver(&tty);
-  DriverManager::installDriver(&memoryManagerDriver);
+  DriverManager::installDriver(&memoryManager);
 }
 
 // The entry point for the kernel after it has been loaded by the bootloader

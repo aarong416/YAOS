@@ -11,6 +11,7 @@ class TtyDriver : public Driver
 {
 public:
   TtyDriver();
+  void initialize();
 
   uint32_t getTerminalColor();
   void setTerminalColor(VgaColor text_color, VgaColor background_color);

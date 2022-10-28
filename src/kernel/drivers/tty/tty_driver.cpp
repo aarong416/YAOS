@@ -7,6 +7,10 @@
 TtyDriver::TtyDriver()
   : Driver("tty", "A TTY driver for writing to the screen", DriverType::Tty)
 {
+}
+
+void TtyDriver::initialize()
+{
   m_width = VgaHelper::getVgaWidth();
   m_height = VgaHelper::getVgaHeight();
   m_terminal_color = VgaHelper::makeColor(VgaColor::LightGray, VgaColor::Black);

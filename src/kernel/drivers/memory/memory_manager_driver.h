@@ -17,8 +17,10 @@ class MemoryManagerDriver : public Driver
   friend class Driver;
 
 public:
-  MemoryManagerDriver(uint8_t* memory_block_array_start, uint32_t block_count, uint8_t* heap_start,
-                      uint32_t heap_size);
+  MemoryManagerDriver();
+  void initialize(uint8_t* memory_block_array_start, uint32_t block_count, uint8_t* heap_start,
+                  uint32_t heap_size);
+
   uint32_t findFreeBlock(uint32_t block_count);
   void* allocate(size_t n);
   void deallocate(void* ptr);
