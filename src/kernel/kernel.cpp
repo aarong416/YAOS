@@ -8,21 +8,17 @@
 
 // Information that is important for the kernel
 KernelInfo kinfo = {};
-DriverManager driver_manager;
 
 TtyDriver tty;
-
-// Driver* drivers[MAX_DRIVERS] = {};
 
 void setup_drivers()
 {
   tty = TtyDriver();
-
   MemoryManagerDriver memoryManagerDriver(kinfo.mm_start, kinfo.heap_block_count, kinfo.heap_start,
                                           kinfo.heap_size);
 
-  driver_manager.installDriver(&tty);
-  driver_manager.installDriver(&memoryManagerDriver);
+  DriverManager::installDriver(&tty);
+  DriverManager::installDriver(&memoryManagerDriver);
 }
 
 // The entry point for the kernel after it has been loaded by the bootloader
@@ -45,15 +41,17 @@ void kernel_main()
 
   setup_drivers();
 
-  TtyDriver* tty = (TtyDriver*) driver_manager.getDriver("tty");
+  // tty.writeLine(tty.getName());
+
+  TtyDriver* tty = (TtyDriver*) DriverManager::getDriver("tty");
 
   tty->write("Installed drivers (");
-  tty->writeInt(driver_manager.getDriverCount());
+  tty->writeInt(DriverManager::getDriverCount());
   tty->writeLine("):");
 
-  Driver** drivers = driver_manager.getAllDrivers();
+  Driver** drivers = DriverManager::getAllDrivers();
 
-  for (uint8_t i = 0; i < driver_manager.getDriverCount(); i++) {
+  for (uint8_t i = 0; i < DriverManager::getDriverCount(); i++) {
     Driver* driver = drivers[i];
 
     tty->write("  ");

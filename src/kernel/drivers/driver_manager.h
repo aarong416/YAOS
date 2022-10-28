@@ -19,19 +19,19 @@ class DriverManager
   friend class Driver;
 
 public:
-  DriverManager();
+  void initialize();
 
-  uint32_t installDriver(Driver* driver);
-  uint32_t removeDriver(const char* name);
+  static uint32_t installDriver(Driver* driver);
+  static uint32_t removeDriver(const char* name);
 
-  Driver* getDriver(const char* name);
-  inline Driver** getAllDrivers() { return m_drivers; };
-  inline uint32_t getDriverCount() { return m_driver_count; };
+  static Driver* getDriver(const char* name);
+  static inline Driver** getAllDrivers() { return m_drivers; };
+  static inline uint32_t getDriverCount() { return m_driver_count; };
 
 private:
-  Driver* m_drivers[MAX_DRIVERS];
-  uint16_t m_index;
-  uint16_t m_driver_count;
+  static Driver* m_drivers[MAX_DRIVERS];
+  static uint16_t m_index;
+  static uint16_t m_driver_count;
 };
 
 #endif

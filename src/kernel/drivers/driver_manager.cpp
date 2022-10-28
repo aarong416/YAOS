@@ -4,7 +4,11 @@
 #include <drivers/driver_manager.h>
 #include <drivers/tty/tty_driver.h>
 
-DriverManager::DriverManager()
+uint16_t DriverManager::m_index = 0;
+uint16_t DriverManager::m_driver_count = 0;
+Driver* DriverManager::m_drivers[MAX_DRIVERS] = {nullptr};
+
+void DriverManager::initialize()
 {
   // Set all drivers to null pointers initially
   for (uint32_t i = 0; i < MAX_DRIVERS; i++) {
@@ -22,10 +26,10 @@ DriverManager::DriverManager()
  * successfully, an a return value of DRIVER_FAILURE indicates the driver was
  * not installed.
  *
- *                   Reasons for failure:
- *                     - the driver manager has not been initialized
- *                     - the maximum numbers of installed drivers has been reached
- *                     - the driver has already been installed
+ * Reasons for failure:
+ *   - the driver manager has not been initialized
+ *   - the maximum numbers of installed drivers has been reached
+ *   - the driver has already been installed
  */
 uint32_t DriverManager::installDriver(Driver* driver)
 {
