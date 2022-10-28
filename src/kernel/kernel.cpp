@@ -45,22 +45,7 @@ void kernel_main()
 
   setup_drivers();
 
-  // tty.writeLine(tty.getName());
+  char* s = "Hey, boooooo!!!!efieawfj9awfjwa9hfj0qw0jf0awf9hwafj0";
 
-  TtyDriver* tty = (TtyDriver*) DriverManager::getDriver("tty");
-
-  tty->write("Installed drivers (");
-  tty->writeInt(DriverManager::getDriverCount());
-  tty->writeLine("):");
-
-  Driver** drivers = DriverManager::getAllDrivers();
-
-  for (uint8_t i = 0; i < DriverManager::getDriverCount(); i++) {
-    Driver* driver = drivers[i];
-
-    tty->write("  ");
-    tty->write(driver->getName());
-    tty->write(": ");
-    tty->writeLine(driver->getDescription());
-  }
+  dump((void*) s, strlen(s));
 }
