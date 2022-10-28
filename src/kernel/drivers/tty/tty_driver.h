@@ -25,6 +25,7 @@ public:
   // TODO: add a writeFormatted() function that is similar to printf()
 
   void writeLine(const char* s);
+  void writeLine();
 
 private:
   uint32_t m_width;

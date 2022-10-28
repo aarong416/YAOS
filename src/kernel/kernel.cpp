@@ -4,7 +4,7 @@
 #include <drivers/memory/memory_manager_driver.h>
 #include <drivers/tty/tty_driver.h>
 #include <kernel.h>
-#include <logging/logger.h>
+#include <logging/logging.h>
 
 // Information that is important for the kernel
 KernelInfo kinfo = {};
@@ -17,12 +17,32 @@ void setup_drivers()
   tty = TtyDriver();
   memoryManager = MemoryManagerDriver();
 
+  Driver* drivers[2] = {&tty, &memoryManager};
+
   tty.initialize();
   memoryManager.initialize(kinfo.mm_start, kinfo.heap_block_count, kinfo.heap_start,
                            kinfo.heap_size);
 
+  tty.write("[*] Installing drivers: ");
+
+  uint32_t driver_count = sizeof(drivers) / sizeof(drivers[0]);
+
+  for (uint32_t i = 0; i < driver_count; i++) {
+    Driver* driver = drivers[i];
+
+    DriverManager::installDriver(driver);
+
+    log(driver->getName(), false);
+
+    if (i != driver_count - 1) {
+      log(", ", false);
+    }
+  }
+
   DriverManager::installDriver(&tty);
   DriverManager::installDriver(&memoryManager);
+
+  log("\n[+] Finished installing drivers");
 }
 
 // The entry point for the kernel after it has been loaded by the bootloader
@@ -45,7 +65,12 @@ void kernel_main()
 
   setup_drivers();
 
-  char* s = "Hey, boooooo!!!!efieawfj9awfjwa9hfj0qw0jf0awf9hwafj0";
+  // char* s =
+  //   "The quick brown fox jumps over the lazy dog!\nThe quick brown fox jumps over the lazy dog?";
 
-  dump((void*) s, strlen(s));
+  // dump(s, strlen(s));
+
+  // TtyDriver* tty = (TtyDriver*) DriverManager::getDriver("tty");
+
+  // log(s);
 }

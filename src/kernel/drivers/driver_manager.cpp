@@ -2,7 +2,7 @@
 #include <cstring/cstring.h>
 #include <drivers/driver.h>
 #include <drivers/driver_manager.h>
-#include <drivers/tty/tty_driver.h>
+#include <logging/logging.h>
 
 uint16_t DriverManager::m_index = 0;
 uint16_t DriverManager::m_driver_count = 0;

@@ -99,6 +99,10 @@ void print_row(char row_bytes[], uint32_t bytes_per_row, uint32_t count, bool is
 
   // Pruint32_t the ASCII representation of the bytes in memory for the current row
   print_ascii(row_bytes, bytes_to_print_count);
+
+  TtyDriver* tty = (TtyDriver*) DriverManager::getDriver("tty");
+
+  tty->writeLine("");
 }
 
 /**
@@ -146,6 +150,4 @@ void dump(void* ptr, uint32_t count)
     // Dump the contents of memory for the current row
     print_row(row_bytes, bytes_per_row, count, is_last_row);
   }
-
-  tty->writeLine("");
 }

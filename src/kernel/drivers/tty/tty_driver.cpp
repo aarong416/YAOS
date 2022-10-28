@@ -94,6 +94,14 @@ void TtyDriver::writeLine(const char* s)
 }
 
 /**
+ * Writes a new line character to the screen
+ */
+void TtyDriver::writeLine()
+{
+  writeChar('\n');
+}
+
+/**
  * Writes an integer to the screen
  *
  * @param n The integer to write
