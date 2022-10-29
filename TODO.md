@@ -1,11 +1,7 @@
 # A list of tasks to complete
 
-- Driver manager
-- Put all function definitions for debugging inside the header file
-
 - malloc() and free()
 
-- Logging function
 - Implement `cout`
 
 - Implement string fill constructor

@@ -59,18 +59,5 @@ void kernel_main()
   kinfo.heap_start = kinfo.mm_start + (heap_block_count * sizeof(MemoryBlock));
   kinfo.heap_block_count = heap_block_count;
 
-  // SEPARATOR
-  // SEPARATOR
-  // SEPARATOR
-
   setup_drivers();
-
-  // char* s =
-  //   "The quick brown fox jumps over the lazy dog!\nThe quick brown fox jumps over the lazy dog?";
-
-  // dump(s, strlen(s));
-
-  // TtyDriver* tty = (TtyDriver*) DriverManager::getDriver("tty");
-
-  // log(s);
 }

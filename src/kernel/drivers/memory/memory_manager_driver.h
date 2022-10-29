@@ -21,7 +21,6 @@ public:
   void initialize(uint8_t* memory_block_array_start, uint32_t block_count, uint8_t* heap_start,
                   uint32_t heap_size);
 
-  uint32_t findFreeBlock(uint32_t block_count);
   void* allocate(size_t n);
   void deallocate(void* ptr);
 
@@ -35,6 +34,8 @@ private:
   uint32_t m_max_block_count; // The maximum number of blocks that can be allocated
   uint32_t m_index = 0;       // The index from which to start searching for a free block
   MemoryBlock** m_blocks;
+
+  uint32_t findFreeBlock(uint32_t block_count);
 };
 
 #endif
