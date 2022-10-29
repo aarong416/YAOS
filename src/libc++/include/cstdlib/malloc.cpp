@@ -2,6 +2,8 @@
 #include <cstdlib/cstdlib.h>
 #include <drivers/driver_manager.h>
 #include <drivers/memory/memory_manager_driver.h>
+#include <drivers/tty/tty_driver.h>
+#include <logging/logging.h>
 
 void* malloc(size_t size)
 {
@@ -9,14 +11,14 @@ void* malloc(size_t size)
     return NULL;
   }
 
-  // TODO: don't access the memory manager driver directly
-  // MemoryManagerDriver* memory_manager =
-  //   (MemoryManagerDriver*) DriverManager::getDriver("memory_manager");
+  MemoryManagerDriver* memoryManager =
+    (MemoryManagerDriver*) DriverManager::getDriver("memory_manager");
 
-  // if (memory_manager == nullptr) {
-  //   return NULL;
-  // }
+  if (!memoryManager) {
+    log("Trying to allocate memory, but no suitable driver was found");
 
-  // TODO: call the allocate() method of MemoryManagerDriver
-  return NULL;
+    return NULL;
+  }
+
+  return memoryManager->allocate(size);
 }

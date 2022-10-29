@@ -1,3 +1,4 @@
+#include <cstdlib/cstdlib.h>
 #include <cstring/cstring.h>
 #include <debugging/debugging.h>
 #include <drivers/driver_manager.h>
@@ -38,9 +39,6 @@ void setup_drivers()
       log(", ", false);
     }
   }
-
-  DriverManager::installDriver(&tty);
-  DriverManager::installDriver(&memoryManager);
 
   log("\n[+] Finished installing drivers");
 }

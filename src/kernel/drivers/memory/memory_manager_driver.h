@@ -25,8 +25,6 @@ public:
   void deallocate(void* ptr);
 
   // TODO: these methods should be private
-  uint32_t getIndexFromHeap(void* ptr);
-  uint8_t* heapAddressFromIndex(uint32_t index);
 
 private:
   uint8_t* m_heap_start;
@@ -36,6 +34,8 @@ private:
   MemoryBlock** m_blocks;
 
   uint32_t findFreeBlock(uint32_t block_count);
+  uint32_t getIndexFromHeap(void* ptr);
+  uint8_t* heapAddressFromIndex(uint32_t index);
 };
 
 #endif

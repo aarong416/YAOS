@@ -1,7 +1,5 @@
 # A list of tasks to complete
 
-- malloc() and free()
-
 - Implement `cout`
 
 - Implement string fill constructor
