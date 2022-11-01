@@ -58,4 +58,13 @@ void kernel_main()
   kinfo.heap_block_count = heap_block_count;
 
   setup_drivers();
+
+  string s1 = "Hello";
+  string s2 = "hello";
+
+  if (s1 == s2) {
+    log("True");
+  } else {
+    log("False");
+  }
 }

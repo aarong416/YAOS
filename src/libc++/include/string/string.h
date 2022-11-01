@@ -10,7 +10,7 @@ namespace std
 {
   class String
   {
-    public:
+  public:
     String(const char* s);
     String(size_t n, char c);
     ~String();
@@ -30,7 +30,7 @@ namespace std
     inline const char* c_str() const { return m_string; };
     std::String& assign(const std::String& str);
 
-    // uint32_t compare(std::String& str) const;
+    uint32_t compare(std::String& str) const;
     uint32_t compare(const char* s) const;
 
     std::String& insert(size_t pos, const char* s);
@@ -45,13 +45,16 @@ namespace std
     std::String& operator=(const std::String& str);
     std::String& operator=(char c);
 
+    bool operator==(const char* s);
+    bool operator==(const std::String& str);
+
     std::String& operator=(const char* s);
     inline char& operator[](size_t pos) { return at(pos); };
     inline const char& operator[](size_t pos) const { return at(pos); };
 
     static const size_t npos = -1;
 
-    private:
+  private:
     char* m_string;
     uint32_t m_length;
     uint32_t m_capacity;

@@ -2,9 +2,19 @@
 
 - Implement `cout`
 
-- Implement string fill constructor
+- Implement std::String::operator=(const char* s)
+- Implement std::String::operator=(char c)
+- Implement std::string::operator=(const string& str)
+
+- Implement std::string::operator==(const char* str)
+- Implement std::string::operator==(const string& str)
+- Implement std::string::operator!=(const char* str)
+- Implement std::string::operator!=(const string& str)
+
+- Implement std::string::operator+
+- Implement std::string::operator+=
+
 - Implement std::to_string
-- Implement std::string::compare and std::string::operator==
 
 - Get info from GRUB (screen size, available memory etc)
 - GDT

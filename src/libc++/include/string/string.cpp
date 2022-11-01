@@ -12,21 +12,20 @@ std::String::String(const char* s)
 {
   // Allocate memory for the new string.
   // strlen(s) + 1 accounts for the extra NULL byte at the end of the string.
+  // `capacity` will always be >= strlen(s)
+  // `capacity` takes the null byte into account
   uint32_t capacity = (strlen(s) + 1) <= BUFFER_SIZE
                         ? BUFFER_SIZE
                         : ceil((strlen(s) + 1) / BUFFER_SIZE) * BUFFER_SIZE;
 
-  // m_string = new char[capacity];
+  m_string = new char[capacity];
+  m_capacity = capacity;
 
-  m_string = (char*) malloc(capacity);
-
-  // No string was provided, so we create an empty array and set its length to
-  // 0
+  // No string was provided, so set its length to 0
   if (!s) {
     m_length = 0;
   } else {
-    // Creates a new char array to hold the string,
-    // adds the null byte to the end of the array,
+    // Creates a new char array to hold the string, adds the null byte to the end of the array,
     // and sets the length of the string
     m_length = strlen(s);
 
@@ -34,8 +33,6 @@ std::String::String(const char* s)
 
     m_string[m_length] = '\0';
   }
-
-  m_capacity = capacity;
 }
 
 std::String::String(size_t n, char c)
@@ -44,8 +41,9 @@ std::String::String(size_t n, char c)
     return;
   }
 
-  uint32_t capacity =
-    n <= BUFFER_SIZE ? BUFFER_SIZE : (ceil(n + 1) / BUFFER_SIZE) * BUFFER_SIZE;
+  // `capacity` will always be >= `n`
+  // `capacity` takes the null byte into account
+  uint32_t capacity = n <= BUFFER_SIZE ? BUFFER_SIZE : (ceil(n + 1) / BUFFER_SIZE) * BUFFER_SIZE;
 
   m_string = new char[capacity];
 
@@ -80,7 +78,10 @@ void std::String::push_back(const char c)
     // TODO: allocate more memory
     // TODO: take into account the null byte (+2 and not +1)?
   } else {
-    m_string[m_length++] = c;
+    // Replace the null byte with the new character, and then re-add
+    // the null byte after the new character
+    m_string[m_length] = c;
+    m_string[m_length + 1] = '\0';
   }
 }
 
@@ -125,6 +126,14 @@ uint32_t std::String::compare(const char* s) const
   return strcmp(m_string, s);
 }
 
+/*
+ * Compares two C++ strings
+ */
+uint32_t std::String::compare(std::String& str) const
+{
+  return compare(str.c_str());
+}
+
 /**
  * Operator overloads
  */
@@ -140,7 +149,21 @@ std::String& std::String::operator=(const char* s)
     m_length = strlen(s);
   }
 
+  // return new std::String(s);
+
   return *this;
+}
+
+// Compares a C++ string with a C string
+bool std::String::operator==(const char* s)
+{
+  return strcmp(m_string, s) == 0;
+}
+
+// Compares two C++ strings
+bool std::String::operator==(const std::String& str)
+{
+  return strcmp(m_string, str.c_str()) == 0;
 }
 
 /**
