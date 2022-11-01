@@ -6,8 +6,6 @@
 - Implement std::String::operator=(char c)
 - Implement std::string::operator=(const string& str)
 
-- Implement std::string::operator==(const char* str)
-- Implement std::string::operator==(const string& str)
 - Implement std::string::operator!=(const char* str)
 - Implement std::string::operator!=(const string& str)
 

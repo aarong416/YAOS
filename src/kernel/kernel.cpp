@@ -60,9 +60,9 @@ void kernel_main()
   setup_drivers();
 
   string s1 = "Hello";
-  string s2 = "hello";
+  string s2 = "Hello";
 
-  if (s1 == s2) {
+  if (s1 != s2) {
     log("True");
   } else {
     log("False");

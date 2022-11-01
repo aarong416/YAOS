@@ -42,11 +42,17 @@ namespace std
     size_t find(const std::String& str, size_t pos = 0);
     size_t find(const char* s, size_t pos = 0);
 
+    /**
+     * Operator overloading
+     */
     std::String& operator=(const std::String& str);
     std::String& operator=(char c);
 
     bool operator==(const char* s);
     bool operator==(const std::String& str);
+
+    bool operator!=(const char* s);
+    bool operator!=(const std::String& str);
 
     std::String& operator=(const char* s);
     inline char& operator[](size_t pos) { return at(pos); };

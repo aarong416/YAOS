@@ -116,8 +116,6 @@ void print_row(char row_bytes[], uint32_t bytes_per_row, uint32_t count, bool is
  */
 void dump(void* ptr, uint32_t count)
 {
-  TtyDriver* tty = (TtyDriver*) DriverManager::getDriver("tty");
-
   /**
    * memory_bytes:  the bytes in memory to dump
    * width:         the total number of printable characters per line

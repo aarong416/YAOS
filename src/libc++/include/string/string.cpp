@@ -154,16 +154,28 @@ std::String& std::String::operator=(const char* s)
   return *this;
 }
 
-// Compares a C++ string with a C string
+// Compares a C++ string with a C string to determine if they match
 bool std::String::operator==(const char* s)
 {
   return strcmp(m_string, s) == 0;
 }
 
-// Compares two C++ strings
+// Compares two C++ strings to determine if they match
 bool std::String::operator==(const std::String& str)
 {
   return strcmp(m_string, str.c_str()) == 0;
+}
+
+// Compares a C++ string with a C string to determine if they don't match
+bool std::String::operator!=(const char* s)
+{
+  return strcmp(m_string, s) != 0;
+}
+
+// Compares two C++ strings to determine if they don't match
+bool std::String::operator!=(const std::String& str)
+{
+  return strcmp(m_string, str.c_str()) != 0;
 }
 
 /**
