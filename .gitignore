@@ -2,3 +2,4 @@
 docs
 obj
 iso/boot/kernel.bin
+.vscode
