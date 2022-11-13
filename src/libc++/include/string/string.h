@@ -11,6 +11,8 @@ namespace std
   class String
   {
   public:
+    String();
+    String(const std::String&);
     String(const char* s);
     String(size_t n, char c);
     ~String();
@@ -46,7 +48,6 @@ namespace std
      * Operator overloading
      */
     std::String& operator=(const std::String& str);
-    std::String& operator=(char c);
 
     bool operator==(const char* s);
     bool operator==(const std::String& str);

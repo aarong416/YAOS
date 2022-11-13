@@ -1,11 +1,25 @@
 #include <cmath/cmath.h>
 #include <cstdlib/cstdlib.h>
 #include <cstring/cstring.h>
-#include <string/string.h>
+#include <drivers/driver_manager.h>
 
 /**
  * Constructors
  */
+
+// Creates a new string and sets its size to 0
+std::String::String()
+{
+  m_length = 0;
+  m_capacity = BUFFER_SIZE;
+  m_string = new char[BUFFER_SIZE];
+  m_string[0] = '\0';
+}
+
+std::String::String(const std::string& str)
+{
+  this->operator=(str);
+}
 
 // Creates a new string and allocates memory for it.
 std::String::String(const char* s)
@@ -38,12 +52,18 @@ std::String::String(const char* s)
 std::String::String(size_t n, char c)
 {
   if (n == 0) {
+    m_length = 0;
+    m_capacity = BUFFER_SIZE;
+    m_string = new char[BUFFER_SIZE];
+    m_string[0] = '\0';
+
     return;
   }
 
   // `capacity` will always be >= `n`
   // `capacity` takes the null byte into account
-  uint32_t capacity = n <= BUFFER_SIZE ? BUFFER_SIZE : (ceil(n + 1) / BUFFER_SIZE) * BUFFER_SIZE;
+  uint32_t capacity =
+    (n + 1) <= BUFFER_SIZE ? BUFFER_SIZE : (ceil((n + 1) / BUFFER_SIZE)) * BUFFER_SIZE;
 
   m_string = new char[capacity];
 
@@ -138,22 +158,6 @@ uint32_t std::String::compare(std::String& str) const
  * Operator overloads
  */
 
-// Copies the contents of the C string `s` into the current string
-std::String& std::String::operator=(const char* s)
-{
-  if (strlen(s) + 1 > m_capacity) {
-    // TODO: allocate more memory
-  } else {
-    strncpy(m_string, s, strlen(s));
-
-    m_length = strlen(s);
-  }
-
-  // return new std::String(s);
-
-  return *this;
-}
-
 // Compares a C++ string with a C string to determine if they match
 bool std::String::operator==(const char* s)
 {
@@ -176,6 +180,48 @@ bool std::String::operator!=(const char* s)
 bool std::String::operator!=(const std::String& str)
 {
   return strcmp(m_string, str.c_str()) != 0;
+}
+
+// Copies the contents of the C string `s` into the current string
+std::String& std::String::operator=(const char* s)
+{
+  // If the C string is longer than the capacity of the current string,
+  // calculate the new capacity based on the C string and allocated
+  // a new area of memory for the string
+  if (strlen(s) + 1 > m_capacity) {
+    delete[] m_string;
+
+    uint32_t capacity = (strlen(s) + 1) <= BUFFER_SIZE
+                          ? BUFFER_SIZE
+                          : ceil((strlen(s) + 1) / BUFFER_SIZE) * BUFFER_SIZE;
+    m_string = new char[capacity];
+    m_capacity = capacity;
+  }
+
+  strncpy(m_string, s, strlen(s));
+
+  m_length = strlen(s);
+  m_string[m_length] = '\0';
+
+  return *this;
+}
+
+// Copies the contents of the C++ string `str` into the current string
+std::String& std::String::operator=(const std::String& str)
+{
+  // Only allocate a new position on the heap for the current string if the capacity
+  // of the other string is greater than the capacity of the current string
+  if (str.m_capacity > m_capacity) {
+    delete[] m_string;
+    m_string = new char[str.m_capacity];
+  }
+
+  strncpy(m_string, str.m_string, str.m_length);
+
+  m_capacity = str.m_capacity;
+  m_length = str.m_length;
+
+  return *this;
 }
 
 /**

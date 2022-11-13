@@ -59,12 +59,12 @@ void kernel_main()
 
   setup_drivers();
 
-  string s1 = "Hello";
-  string s2 = "Hello";
+  string s1 = "One";
+  string s2 = s1;
 
-  if (s1 != s2) {
-    log("True");
-  } else {
-    log("False");
-  }
+  s1 = "s1 modified";
+  s2 = "s2 modified";
+
+  log(s1.c_str());
+  log(s2.c_str());
 }
