@@ -8,7 +8,10 @@
 
 - Consider implementing std::string::operator+=
 
-- Get info from GRUB (screen size, available memory etc)
+- Get info from GRUB
+  - screen size
+  - available memory
+  - ...
 - GDT
 - Timer
 - Keyboard driver
