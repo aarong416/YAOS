@@ -51,7 +51,7 @@ The above process will take about 2 - 3 minutes
 GCC can be downloaded at [https://ftp.gnu.org/gnu/gcc/gcc-9.4.0/gcc-9.4.0.tar.gz](https://ftp.gnu.org/gnu/gcc/gcc-9.4.0/gcc-9.4.0.tar.gz), or you can browser all available versions at [https://ftp.gnu.org/gnu/gcc/](https://ftp.gnu.org/gnu/gcc/).
 
 ```bash
-tar xf /path/to/binutils-src.tar.gz -C $PREFIX/src
+tar xf /path/to/gcc-9.4.0.tar.gz -C $PREFIX/src
 
 mkdir -p $PREFIX/build/gcc-9.4.0
 cd $PREFIX/build/gcc-9.4.0
@@ -59,7 +59,7 @@ cd $PREFIX/build/gcc-9.4.0
 # The $PREFIX/bin dir must be in PATH. We did that above.
 which -- $TARGET-as || echo $TARGET-as is not in PATH
 
-$PREFIX/src/gcc-4.9.0/configure --target=$TARGET --prefix="$PREFIX" --disable-nls --enable-languages=c,c++ --without-headers
+$PREFIX/src/gcc-9.4.0/configure --target=$TARGET --prefix="$PREFIX" --disable-nls --enable-languages=c,c++ --without-headers
 make all-gcc
 make all-target-libgcc
 make install-gcc
