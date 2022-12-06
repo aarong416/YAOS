@@ -34,10 +34,10 @@ Binutils can be downloaded at [https://ftp.gnu.org/gnu/binutils/binutils-2.39.ta
 The below commands compile binutils (assembler, disassembler, and various other useful stuff), handling code in the format specified by `$TARGET`.
 
 ```bash
-tar xf /path/to/binutils-src.tar.gz -C $PREFIX/src
+tar xf /path/to/binutils-2.39.tar.gz -C $PREFIX/src
 
 mkdir -p $PREFIX/build/binutils-2.39
-cd $PREFIX/build/gcc-2.39
+cd $PREFIX/build/binutils-2.39
 
 $PREFIX/src/binutils-2.39/configure --target=$TARGET --prefix="$PREFIX" --with-sysroot --disable-nls --disable-werror
 make
