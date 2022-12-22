@@ -4,8 +4,9 @@ Yet Another Operating System
 
 ## Getting Started
 
-1. `apt install nasm g++ xorisso qemu-system-i386`
-2. `make`
+1. `apt install nasm g++ xorisso qemu-system-i386` for compilation
+2. `apt install clang clang-format` for auto formatting with Visual Studio Code
+3. `make`
 
 ## Building a Cross Compiler
 
@@ -22,19 +23,19 @@ mkdir -p $HOME/opt/cross/{bin,build,src}
 
 export PREFIX="$HOME/opt/cross"
 export TARGET=i686-elf
-export PATH="$PREFIX/bin:$PATH" # (or add this to your `.bashrc` file)
+sudexport PATH="$PREFIX/bin:$PATH" # (or add this to your `.bashrc` file)
 
 cd $HOME/opt/cross
 ```
 
 ### Building Binutils
 
-Binutils can be downloaded at [https://ftp.gnu.org/gnu/binutils/binutils-2.39.tar.gz](https://ftp.gnu.org/gnu/binutils/binutils-2.39.tar.gz), or you can browser all available versions at [https://ftp.gnu.org/gnu/binutils](https://ftp.gnu.org/gnu/binutils).
+Binutils can be downloaded at [https://ftp.gnu.org/gnu/binutils/binutils-2.39.tar.gz](https://ftp.gnu.org/gnu/binutils/binutils-2.39.tar.gz), or you can browse all available versions at [https://ftp.gnu.org/gnu/binutils](https://ftp.gnu.org/gnu/binutils).
 
 The below commands compile binutils (assembler, disassembler, and various other useful stuff), handling code in the format specified by `$TARGET`.
 
 ```bash
-tar xf /path/to/binutils-2.39.tar.gz -C $PREFIX/src
+tar xf ~/Downloads/binutils-2.39.tar.gz -C $PREFIX/src
 
 mkdir -p $PREFIX/build/binutils-2.39
 cd $PREFIX/build/binutils-2.39
@@ -48,10 +49,10 @@ The above process will take about 2 - 3 minutes
 
 ### Building GCC
 
-GCC can be downloaded at [https://ftp.gnu.org/gnu/gcc/gcc-9.4.0/gcc-9.4.0.tar.gz](https://ftp.gnu.org/gnu/gcc/gcc-9.4.0/gcc-9.4.0.tar.gz), or you can browser all available versions at [https://ftp.gnu.org/gnu/gcc/](https://ftp.gnu.org/gnu/gcc/).
+GCC can be downloaded at [https://ftp.gnu.org/gnu/gcc/gcc-9.4.0/gcc-9.4.0.tar.gz](https://ftp.gnu.org/gnu/gcc/gcc-9.4.0/gcc-9.4.0.tar.gz), or you can browse all available versions at [https://ftp.gnu.org/gnu/gcc/](https://ftp.gnu.org/gnu/gcc/).
 
 ```bash
-tar xf /path/to/gcc-9.4.0.tar.gz -C $PREFIX/src
+tar xf ~/Downloads/gcc-9.4.0.tar.gz -C $PREFIX/src
 
 mkdir -p $PREFIX/build/gcc-9.4.0
 cd $PREFIX/build/gcc-9.4.0

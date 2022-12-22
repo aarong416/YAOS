@@ -9,7 +9,7 @@
  *
  * @param s The string to write
  */
-void log(const char* s, bool appendNewLine)
+void log(const char* s, bool appendNewLine = true)
 {
   TtyDriver* tty = (TtyDriver*) DriverManager::getDriver("tty");
 
