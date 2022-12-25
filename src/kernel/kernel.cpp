@@ -4,6 +4,7 @@
 #include <drivers/driver_manager.h>
 #include <drivers/memory/memory_manager_driver.h>
 #include <drivers/tty/tty_driver.h>
+#include <iostream/iostream.h>
 #include <kernel.h>
 #include <logging/logging.h>
 
@@ -12,6 +13,25 @@ KernelInfo kinfo = {};
 
 TtyDriver tty;
 MemoryManagerDriver memoryManager;
+
+// The entry point for the kernel after it has been loaded by the bootloader
+void kernel_main()
+{
+  uint32_t memory_size = 64 * 1024 * 1024;       // TODO: get this from GRUB
+  uint32_t heap_size = memory_size * (10 / 100); // The heap is currently 10% of the total memory
+  uint32_t heap_block_count = floor(heap_size / BLOCK_SIZE);
+
+  kinfo.end = kernel_end;
+  kinfo.heap_size = heap_size;
+
+  kinfo.mm_start = (uint8_t*) memset(kinfo.end + 1, 0, heap_block_count * sizeof(MemoryBlock));
+  kinfo.heap_start = kinfo.mm_start + (heap_block_count * sizeof(MemoryBlock));
+  kinfo.heap_block_count = heap_block_count;
+
+  setup_drivers();
+
+  std::cout << "YAOS booted\n\n";
+}
 
 void setup_drivers()
 {
@@ -33,38 +53,14 @@ void setup_drivers()
 
     DriverManager::installDriver(driver);
 
-    log(driver->getName(), false);
+    // log(driver->getName(), false);
+    std::cout << driver->getName();
 
     if (i != driver_count - 1) {
-      log(", ", false);
+      // log(", ", false);
+      std::cout << ", ";
     }
   }
 
-  log("\n[+] Finished installing drivers");
-}
-
-// The entry point for the kernel after it has been loaded by the bootloader
-void kernel_main()
-{
-  uint32_t memory_size = 64 * 1024 * 1024;       // TODO: get this from GRUB
-  uint32_t heap_size = memory_size * (10 / 100); // The heap is currently 10% of the total memory
-  uint32_t heap_block_count = floor(heap_size / BLOCK_SIZE);
-
-  kinfo.end = kernel_end;
-  kinfo.heap_size = heap_size;
-
-  kinfo.mm_start = (uint8_t*) memset(kinfo.end + 1, 0, heap_block_count * sizeof(MemoryBlock));
-  kinfo.heap_start = kinfo.mm_start + (heap_block_count * sizeof(MemoryBlock));
-  kinfo.heap_block_count = heap_block_count;
-
-  setup_drivers();
-
-  string s1 = "One";
-  string s2 = s1;
-
-  s1 = "s1 modified";
-  s2 = "s2 modified";
-
-  log(s1.c_str());
-  log(s2.c_str());
+  std::cout << "\n[+] Finished installing drivers\n\n";
 }

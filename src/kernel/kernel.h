@@ -18,4 +18,6 @@ struct KernelInfo {
   uint8_t* fs_start;         // The starting address of the filesystem in memory
 };
 
+void setup_drivers();
+
 #endif

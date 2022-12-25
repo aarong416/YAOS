@@ -4,7 +4,7 @@ Yet Another Operating System
 
 ## Getting Started
 
-1. `apt install nasm g++ xorisso qemu-system-i386` for compilation
+1. `apt install nasm g++ xorriso qemu-system-i386` for compilation
 2. `apt install clang clang-format` for auto formatting with Visual Studio Code
 3. `make`
 
@@ -23,7 +23,7 @@ mkdir -p $HOME/opt/cross/{bin,build,src}
 
 export PREFIX="$HOME/opt/cross"
 export TARGET=i686-elf
-sudexport PATH="$PREFIX/bin:$PATH" # (or add this to your `.bashrc` file)
+export PATH="$PATH:$PREFIX/bin"
 
 cd $HOME/opt/cross
 ```
@@ -45,7 +45,7 @@ make
 make install
 ```
 
-The above process will take about 2 - 3 minutes
+The above process will take about 2 - 3 minutes.
 
 ### Building GCC
 
@@ -58,7 +58,7 @@ mkdir -p $PREFIX/build/gcc-9.4.0
 cd $PREFIX/build/gcc-9.4.0
  
 # The $PREFIX/bin dir must be in PATH. We did that above.
-which -- $TARGET-as || echo $TARGET-as is not in PATH
+which -- $TARGET-as || echo "$TARGET-as is not in PATH"
 
 $PREFIX/src/gcc-9.4.0/configure --target=$TARGET --prefix="$PREFIX" --disable-nls --enable-languages=c,c++ --without-headers
 make all-gcc
@@ -67,6 +67,6 @@ make install-gcc
 make install-target-libgcc
 ```
 
-The above process will take about 20 - 25 minutes
+The above process will take about 20 - 25 minutes.
 
-To be able to use the newly compiled gcc globally, add `export PATH=$PATH:/home/<username>/opt/cross/bin` to your `.bashrc` file.
+To be able to use the newly compiled gcc globally, add `export PATH=$PATH:$HOME/opt/cross/bin` to your `.bashrc` file.
