@@ -20,12 +20,10 @@ public:
   void writeChar(const char c);
   void write(const char* s);
   void write(const std::string& s);
-  void writeInt(int n);
-
-  // TODO: add a writeFormatted() function that is similar to printf()
 
   void writeLine(const char* s);
   void writeLine();
+  void moveCursor(uint32_t x, uint32_t y);
 
 private:
   uint32_t m_width;

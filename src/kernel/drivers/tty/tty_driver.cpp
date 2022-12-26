@@ -1,7 +1,7 @@
-#include <cstdlib/cstdlib.h>
 #include <cstring/cstring.h>
 #include <drivers/driver.h>
 #include <drivers/tty/tty_driver.h>
+#include <io/io.h>
 #include <string/string.h>
 
 TtyDriver::TtyDriver()
@@ -40,6 +40,8 @@ void TtyDriver::writeChar(const char c)
     m_cursor_x = 0;
     m_cursor_y += 2;
 
+    moveCursor(m_cursor_x, m_cursor_y / 2);
+
     return;
   }
 
@@ -56,6 +58,8 @@ void TtyDriver::writeChar(const char c)
   vidmem[i + 1] = m_terminal_color;
 
   m_cursor_x++;
+
+  moveCursor(m_cursor_x, m_cursor_y / 2);
 }
 
 /**
@@ -102,15 +106,17 @@ void TtyDriver::writeLine()
 }
 
 /**
- * Writes an integer to the screen
+ * Update the location of the hardware cursor
  *
- * @param n The integer to write
+ * @param x The x coordinate for the cursor
+ * @param y The y coordinate for the cursor
  */
-void TtyDriver::writeInt(int n)
+void TtyDriver::moveCursor(uint32_t x, uint32_t y)
 {
-  char s[11];
+  uint16_t pos = y * m_width + x;
 
-  itoa(n, s, 10);
-
-  write(s);
+  outb(PORT_VGA_COMMAND, 0x0F);
+  outb(PORT_VGA_DATA, (uint16_t)(pos & 0xFF));
+  outb(PORT_VGA_COMMAND, 0x0E);
+  outb(PORT_VGA_DATA, (uint16_t)((pos >> 8) & 0xFF));
 }
