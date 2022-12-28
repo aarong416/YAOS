@@ -2,8 +2,7 @@
 #include <cstdlib/cstdlib.h>
 #include <cstring/cstring.h>
 #include <debugging/debugging.h>
-#include <drivers/driver_manager.h>
-#include <drivers/tty/tty_driver.h>
+#include <iostream/iostream.h>
 
 /**
  * Prints spaces for the current row so that the ASCII characters for the last
@@ -14,8 +13,6 @@
  */
 void print_spaces_until_ascii(uint32_t bytes_per_row, uint32_t count)
 {
-  TtyDriver* tty = (TtyDriver*) DriverManager::getDriver("tty");
-
   uint32_t spaces_count = (bytes_per_row - (count % bytes_per_row)) * (CHARACTERS_PER_BYTE - 1);
 
   if (spaces_count == bytes_per_row) {
@@ -23,15 +20,13 @@ void print_spaces_until_ascii(uint32_t bytes_per_row, uint32_t count)
   }
 
   for (uint32_t i = 0; i < spaces_count; i++) {
-    tty->writeChar(' ');
+    std::cout << " ";
   }
 }
 
 // Pruint32_t hex digits
 void print_hex(char row_bytes[], uint32_t bytes_to_print_count)
 {
-  TtyDriver* tty = (TtyDriver*) DriverManager::getDriver("tty");
-
   // Stores the hex digit that was converted from an integer
   char s[3];
 
@@ -41,9 +36,17 @@ void print_hex(char row_bytes[], uint32_t bytes_to_print_count)
 
     itoh((int) byte, s);
 
-    tty->writeChar(s[0]); // TODO: should be able to do write(s): itoa not working properly
-    tty->writeChar(s[1]);
-    tty->writeChar(' ');
+    if (strlen(s) == 0) {
+      std::cout << "XX ";
+    }
+
+    if (strlen(s) == 1) {
+      std::cout << s << "0 ";
+    }
+
+    if (strlen(s) == 2) {
+      std::cout << s << " ";
+    }
   }
 }
 
@@ -57,15 +60,13 @@ void print_hex(char row_bytes[], uint32_t bytes_to_print_count)
  */
 void print_ascii(char row_bytes[], uint32_t count)
 {
-  TtyDriver* tty = (TtyDriver*) DriverManager::getDriver("tty");
-
   for (uint32_t i = 0; i < count; i++) {
     unsigned char byte = row_bytes[i];
 
     if (byte >= 32 && byte <= 127) {
-      tty->writeChar(byte);
+      std::cout << byte;
     } else {
-      tty->writeChar('.');
+      std::cout << ".";
     }
   }
 }
@@ -100,9 +101,7 @@ void print_row(char row_bytes[], uint32_t bytes_per_row, uint32_t count, bool is
   // Pruint32_t the ASCII representation of the bytes in memory for the current row
   print_ascii(row_bytes, bytes_to_print_count);
 
-  TtyDriver* tty = (TtyDriver*) DriverManager::getDriver("tty");
-
-  tty->writeLine("");
+  std::cout << "\n";
 }
 
 /**

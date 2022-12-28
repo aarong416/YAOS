@@ -1,7 +1,7 @@
 #include <cmath/cmath.h>
 #include <cstdlib/cstdlib.h>
 #include <cstring/cstring.h>
-#include <drivers/driver_manager.h>
+#include <iostream/iostream.h>
 
 /**
  * Constructors
@@ -10,6 +10,8 @@
 // Creates a new string and sets its size to 0
 std::String::String()
 {
+  std::cout << "Constructor 1";
+
   m_length = 0;
   m_capacity = BUFFER_SIZE;
   m_string = new char[BUFFER_SIZE];
@@ -18,6 +20,8 @@ std::String::String()
 
 std::String::String(const std::string& str)
 {
+  std::cout << "Constructor 2";
+
   this->operator=(str);
 }
 
@@ -43,10 +47,12 @@ std::String::String(const char* s)
     // and sets the length of the string
     m_length = strlen(s);
 
-    strncpy(m_string, s, strlen(s));
+    strcpy(m_string, s);
 
     m_string[m_length] = '\0';
   }
+
+  std::cout << c_str() << "\n\n";
 }
 
 std::String::String(size_t n, char c)
