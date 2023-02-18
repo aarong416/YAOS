@@ -27,6 +27,8 @@ dd TAGS
 
 section .text
 
+%include "src/include/gdt/gdt.asm"
+
 start:
     mov esp, stack_space
     push ebx

@@ -1,18 +1,16 @@
 # A list of tasks to complete
 
-- Change dump() to use std::cout
 - GDT
+- IDT
+- Keyboard driver
+- Shell
 
 - Get info from GRUB
   - screen size
   - available memory
-  - loaded GRUB modules
+  - loaded GRUB modules (should drivers be GRUB modules?)
   - ...
   
-- Keyboard driver
-- Shell
-
-- IDT
 - Timer
 
 - Exceptions
